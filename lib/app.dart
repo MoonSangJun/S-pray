@@ -13,7 +13,24 @@
 // limitations under the License.
 
 import 'package:flutter/material.dart';
+import 'home.dart';
+import 'login.dart';
 
-import 'app.dart';
+class SprayApp extends StatelessWidget {
+  const SprayApp({Key? key}) : super(key: key);
 
-void main() => runApp(const SprayApp());
+  @override
+  Widget build(BuildContext context) {
+
+    return MaterialApp(
+      title: 'Shrine',
+      initialRoute: '/login',
+      routes: {
+        '/': (BuildContext context) => const HomePage(),
+        '/login': (BuildContext context) => const LoginPage(),
+
+      },
+    );
+  }
+}
+
