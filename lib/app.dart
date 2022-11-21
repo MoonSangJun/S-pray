@@ -15,6 +15,7 @@
 import 'package:flutter/material.dart';
 import 'home.dart';
 import 'login.dart';
+import 'map.dart';
 
 class SprayApp extends StatelessWidget {
   const SprayApp({Key? key}) : super(key: key);
@@ -26,7 +27,7 @@ class SprayApp extends StatelessWidget {
       title: 'Shrine',
       initialRoute: '/login',
       routes: {
-        '/': (BuildContext context) => const HomePage(),
+        '/': (BuildContext context) => const MapPage(),
         '/login': (BuildContext context) => const LoginPage(),
 
       },

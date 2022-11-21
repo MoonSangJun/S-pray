@@ -4,6 +4,9 @@
         android:label="spray"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+       <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyD65McC4NOtbpgIRj4RAK122FR4wugIqvI"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
