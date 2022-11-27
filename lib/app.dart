@@ -28,7 +28,7 @@ class SprayApp extends StatelessWidget {
       title: 'Shrine',
       initialRoute: '/login',
       routes: {
-        '/': (BuildContext context) => const MapPage(),
+        '/': (BuildContext context) => const HomePage(),
         '/login': (BuildContext context) => const LoginPage(),
         '/timer': (BuildContext context) => TimerPage(),
 

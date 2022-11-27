@@ -46,6 +46,7 @@ dependencies:
   http: ^0.13.5
   d_chart: ^0.1.0
   stop_watch_timer: ^2.0.0
+  bottom_bar: ^2.0.3
 
 dev_dependencies:
   flutter_test:
