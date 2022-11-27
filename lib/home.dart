@@ -32,7 +32,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
+      body:
+      PageView(
         controller: _pageController,
         children: [
 
@@ -99,27 +100,27 @@ class _HomePageState extends State<HomePage> {
           BottomBarItem(
             icon: Icon(Icons.timer),
             title: Text('Timer'),
-            activeColor: Colors.blue,
+            activeColor: Colors.purple
           ),
           BottomBarItem(
             icon: Icon(Icons.group_add),
             title: Text('Group'),
-            activeColor: Colors.red,
+              activeColor: Colors.purple
           ),
           BottomBarItem(
             icon: Icon(Icons.home),
             title: Text('Home'),
-            activeColor: Colors.greenAccent.shade700,
+              activeColor: Colors.purple
           ),
           BottomBarItem(
             icon: Icon(Icons.calendar_month),
             title: Text('calendar'),
-            activeColor: Colors.orange,
+              activeColor: Colors.purple
           ),
           BottomBarItem(
             icon: Icon(Icons.map),
             title: Text('Map'),
-            activeColor: Colors.orange,
+              activeColor: Colors.purple
           ),
         ],
       ),
