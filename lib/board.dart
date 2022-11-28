@@ -2,6 +2,7 @@ import 'dart:async';
 
 //DateFormat('yy/MM/dd - HH:mm:ss').format(now),
 
+import 'package:bottom_bar/bottom_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     hide EmailAuthProvider, PhoneAuthProvider;
@@ -10,43 +11,170 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:spray/timer.dart';
 
 import 'firebase_options.dart';
+import 'home.dart';
+import 'login.dart';
+import 'map.dart';
 import 'src/widgets.dart';
 
 
-class BoardPage extends StatelessWidget {
+class BoardPage extends StatefulWidget {
   const BoardPage({super.key});
 
   @override
+  State<BoardPage> createState() => _BoardPageState();
+}
+
+class _BoardPageState extends State<BoardPage> {
+  int _currentPage = 1;
+
+  final _children = [
+    TimerPage(),
+    BoardPage(),//Group Page
+    HomePage(),
+    LoginPage(), // Calender Page
+    MapPage(),
+  ];
+
+  _onTap() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (BuildContext context) => _children[_currentPage])); // this has changed
+  }
+
+  final _pageController = PageController();
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Board'),
-      ),
-      body: ListView(
-        children: <Widget>[
-          const SizedBox(height: 50),
-          Container(
-            height: 100,
-            color: Colors.purple.shade100,
-            child: Text("모앱개 팀플",),
-          ),
-          const SizedBox(height: 100),
-          Consumer<ApplicationState>(
-            builder: (context, appState, _) => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (appState.loggedIn) ...[
-                  const Header('기도제목'),
-                  GuestBook(
-                    addMessage: (message) =>
-                        appState.addMessageToGuestBook(message),
-                    messages: appState.guestBookMessages,
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: const BoxDecoration(
+                color: Colors.purple,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.all(13.0),
+                    child: Text(
+                      'Spray',
+                      style: TextStyle(color: Colors.white, fontSize: 30),
+                    ),
                   ),
                 ],
-              ],
+              ),
             ),
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
+              leading:  Icon(Icons.church, color: Colors.purple.shade100),
+              title: const Text('Favorite Group'),
+              onTap: () {
+                Navigator.pushNamed(context, '/hotel');
+              },
+            ),
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
+              leading:  Icon(Icons.person, color: Colors.purple.shade100),
+              title: const Text('My Profile'),
+              onTap: () {
+                Navigator.pushNamed(context, '/my');
+              },
+            ),
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
+              leading:  Icon(Icons.logout, color: Colors.purple.shade100),
+              title: const Text('Log Out'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/login');
+              },
+            ),
+          ],
+        ),
+      ),
+      appBar: AppBar(
+        backgroundColor: Colors.purple,
+        title: const Text("Home"), centerTitle: true,
+
+
+      ),
+      body:
+      PageView(
+        controller: _pageController,
+        children: [
+
+          ListView(
+            children: <Widget>[
+              const SizedBox(height: 50),
+              Container(
+                height: 100,
+                color: Colors.purple.shade100,
+                child: Text("모앱개 팀플",),
+              ),
+              const SizedBox(height: 100),
+              Consumer<ApplicationState>(
+                builder: (context, appState, _) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (appState.loggedIn) ...[
+                      const Header('기도제목'),
+                      GuestBook(
+                        addMessage: (message) =>
+                            appState.addMessageToGuestBook(message),
+                        messages: appState.guestBookMessages,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+
+        ],
+        onPageChanged: (index) {
+          // Use a better state management solution
+          // setState is used for simplicity
+          setState(() => _currentPage = index);
+        },
+      ),
+      bottomNavigationBar: BottomBar(
+        selectedIndex: _currentPage,
+        onTap: (int index) {
+          _pageController.jumpToPage(index);
+          setState(() => _currentPage = index);
+          _onTap();
+        },
+        items: <BottomBarItem>[
+          BottomBarItem(
+              icon: Icon(Icons.timer),
+              title: Text('Timer'),
+              activeColor: Colors.purple
+          ),
+          BottomBarItem(
+              icon: Icon(Icons.group_add),
+              title: Text('Group'),
+              activeColor: Colors.purple
+          ),
+          BottomBarItem(
+              icon: Icon(Icons.home),
+              title: Text('Home'),
+              activeColor: Colors.purple
+          ),
+          BottomBarItem(
+              icon: Icon(Icons.calendar_month),
+              title: Text('calendar'),
+              activeColor: Colors.purple
+          ),
+          BottomBarItem(
+              icon: Icon(Icons.map),
+              title: Text('Map'),
+              activeColor: Colors.purple
           ),
         ],
       ),

@@ -2,6 +2,7 @@ import 'package:bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:spray/timer.dart';
+import 'board.dart';
 import 'home.dart';
 import 'login.dart';
 import 'src/locations.dart' as locations;
@@ -19,7 +20,7 @@ class _MapPageState extends State<MapPage> {
 
   final _children = [
     TimerPage(),
-    LoginPage(),//Group Page
+    BoardPage(),//Group Page
     HomePage(),
     LoginPage(), // Calender Page
     MapPage(),
