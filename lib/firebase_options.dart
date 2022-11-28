@@ -28,10 +28,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -51,7 +48,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyA7a1pUjfOyTfQtsMfkdYs6LghAl9EqRxE',
-    appId: '1:760079685871:android:25ee0ef5aba97439d8631a',
+    appId: '1:760079685871:android:710aae945e636c85d8631a',
     messagingSenderId: '760079685871',
     projectId: 'fir-pary',
     storageBucket: 'fir-pary.appspot.com',
@@ -65,5 +62,15 @@ class DefaultFirebaseOptions {
     storageBucket: 'fir-pary.appspot.com',
     iosClientId: '760079685871-ivoau09rrcq0a2ik0f3n9rd83opa8gmc.apps.googleusercontent.com',
     iosBundleId: 'com.example.spray',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyBmc2kORlD_Xk4ggGYKd7AFbxkEGaqAQ_8',
+    appId: '1:760079685871:ios:8c42a7d8e52f38b9d8631a',
+    messagingSenderId: '760079685871',
+    projectId: 'fir-pary',
+    storageBucket: 'fir-pary.appspot.com',
+    iosClientId: '760079685871-0o987d1q05mejlserf7j31g9r2c8ev5a.apps.googleusercontent.com',
+    iosBundleId: 'com.example.app',
   );
 }

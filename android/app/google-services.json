@@ -7,6 +7,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:760079685871:android:710aae945e636c85d8631a",
+        "android_client_info": {
+          "package_name": "com.example.shrine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "760079685871-nou8elvqbitou6dhmok7m21j8f66gpco.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7a1pUjfOyTfQtsMfkdYs6LghAl9EqRxE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "760079685871-nou8elvqbitou6dhmok7m21j8f66gpco.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "760079685871-ivoau09rrcq0a2ik0f3n9rd83opa8gmc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.spray"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:760079685871:android:25ee0ef5aba97439d8631a",
         "android_client_info": {
           "package_name": "com.example.spray"

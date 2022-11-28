@@ -1,0 +1,374 @@
+import 'dart:async';
+
+//DateFormat('yy/MM/dd - HH:mm:ss').format(now),
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart'
+    hide EmailAuthProvider, PhoneAuthProvider;
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
+
+import 'firebase_options.dart';
+import 'src/widgets.dart';
+
+
+class BoardPage extends StatelessWidget {
+  const BoardPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Board'),
+      ),
+      body: ListView(
+        children: <Widget>[
+          const SizedBox(height: 50),
+          Container(
+            height: 100,
+            color: Colors.purple.shade100,
+            child: Text("모앱개 팀플",),
+          ),
+          const SizedBox(height: 100),
+          Consumer<ApplicationState>(
+            builder: (context, appState, _) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (appState.loggedIn) ...[
+                  const Header('기도제목'),
+                  GuestBook(
+                    addMessage: (message) =>
+                        appState.addMessageToGuestBook(message),
+                    messages: appState.guestBookMessages,
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+
+
+enum Attending { yes, no, unknown }
+
+class ApplicationState extends ChangeNotifier {
+  ApplicationState() {
+    init();
+  }
+
+  bool _loggedIn = false;
+  bool get loggedIn => _loggedIn;
+
+  bool _emailVerified = false;
+  bool get emailVerified => _emailVerified;
+
+  StreamSubscription<QuerySnapshot>? _guestBookSubscription;
+  List<GuestBookMessage> _guestBookMessages = [];
+  List<GuestBookMessage> get guestBookMessages => _guestBookMessages;
+
+  int _attendees = 0;
+  int get attendees => _attendees;
+
+  static Map<String, dynamic> defaultValues = <String, dynamic>{
+    'event_date': 'October 18, 2022',
+    'enable_free_swag': false,
+    'call_to_action': 'Join us for a day full of Firebase Workshops and Pizza!',
+  };
+
+  // ignoring lints on these fields since we are modifying them in a different
+  // part of the codelab
+  // ignore: prefer_final_fields
+  bool _enableFreeSwag = defaultValues['enable_free_swag'] as bool;
+  bool get enableFreeSwag => _enableFreeSwag;
+
+  // ignore: prefer_final_fields
+  String _eventDate = defaultValues['event_date'] as String;
+  String get eventDate => _eventDate;
+
+  // ignore: prefer_final_fields
+  String _callToAction = defaultValues['call_to_action'] as String;
+  String get callToAction => _callToAction;
+
+  Attending _attending = Attending.unknown;
+  StreamSubscription<DocumentSnapshot>? _attendingSubscription;
+  Attending get attending => _attending;
+  set attending(Attending attending) {
+    final userDoc = FirebaseFirestore.instance
+        .collection('attendees')
+        .doc(FirebaseAuth.instance.currentUser!.uid);
+    if (attending == Attending.yes) {
+      userDoc.set(<String, dynamic>{'attending': true});
+    } else {
+      userDoc.set(<String, dynamic>{'attending': false});
+    }
+  }
+
+  Future<void> init() async {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+
+    FirebaseUIAuth.configureProviders([
+      EmailAuthProvider(),
+    ]);
+
+    FirebaseFirestore.instance
+        .collection('attendees')
+        .where('attending', isEqualTo: true)
+        .snapshots()
+        .listen((snapshot) {
+      _attendees = snapshot.docs.length;
+      notifyListeners();
+    });
+
+    FirebaseAuth.instance.userChanges().listen((user) {
+      if (user != null) {
+        _loggedIn = true;
+        _emailVerified = user.emailVerified;
+        _guestBookSubscription = FirebaseFirestore.instance
+            .collection('guestbook')
+            .orderBy('timestamp', descending: true)
+            .snapshots()
+            .listen((snapshot) {
+          _guestBookMessages = [];
+          for (final document in snapshot.docs) {
+            _guestBookMessages.add(
+              GuestBookMessage(
+                name: document.data()['name'] as String,
+                message: document.data()['text'] as String,
+                time: document.data()['timestamp'] as Timestamp,
+                //time: DateFormat('yy/MM/dd - HH:mm:ss').format(DateTime.now()),
+              ),
+            );
+          }
+          notifyListeners();
+        });
+        _attendingSubscription = FirebaseFirestore.instance
+            .collection('attendees')
+            .doc(user.uid)
+            .snapshots()
+            .listen((snapshot) {
+          if (snapshot.data() != null) {
+            if (snapshot.data()!['attending'] as bool) {
+              _attending = Attending.yes;
+            } else {
+              _attending = Attending.no;
+            }
+          } else {
+            _attending = Attending.unknown;
+          }
+          notifyListeners();
+        });
+      } else {
+        _loggedIn = false;
+        _emailVerified = false;
+        _guestBookMessages = [];
+        _guestBookSubscription?.cancel();
+        _attendingSubscription?.cancel();
+      }
+      notifyListeners();
+    });
+  }
+
+  Future<void> refreshLoggedInUser() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser == null) {
+      return;
+    }
+
+    await currentUser.reload();
+  }
+
+  Future<DocumentReference> addMessageToGuestBook(String message) {
+    if (!_loggedIn) {
+      throw Exception('Must be logged in');
+    }
+
+    return FirebaseFirestore.instance
+        .collection('guestbook')
+        .add(<String, dynamic>{
+      'text': message,
+      'timestamp': DateTime.now(),
+      'name': FirebaseAuth.instance.currentUser!.displayName,
+      'userId': FirebaseAuth.instance.currentUser!.uid,
+    });
+  }
+
+  Future<void> delete(DocumentReference reference) async{
+    await reference.delete();
+  }
+
+}
+
+class GuestBookMessage {
+  GuestBookMessage({required this.name, required this.message, required this.time, });
+  final String name;
+  final String message;
+  final Timestamp time;
+}
+
+class GuestBook extends StatefulWidget {
+  const GuestBook({
+    super.key,
+    required this.addMessage,
+    required this.messages,
+  });
+  final FutureOr<void> Function(String message) addMessage;
+  final List<GuestBookMessage> messages;
+
+  @override
+  State<GuestBook> createState() => _GuestBookState();
+}
+
+class _GuestBookState extends State<GuestBook> {
+  final _formKey = GlobalKey<FormState>(debugLabel: '_GuestBookState');
+  final _controller = TextEditingController();
+  final now = DateTime.now();
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Form(
+            key: _formKey,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _controller,
+                    decoration: const InputDecoration(
+                      hintText: '기도제목을 남겨주세요',
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Enter your message to continue';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                StyledButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      await widget.addMessage(_controller.text);
+                      _controller.clear();
+                    }
+                  },
+                  child: Row(
+                    children: const [
+                      Icon(Icons.save_alt,color: Colors.purple),
+                      SizedBox(width: 4),
+                      Text('SAVED',style: TextStyle(color: Colors.purple)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+
+
+        for (var message in widget.messages)...[
+          Row(
+            children:[
+              Column(crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Paragraph2('${message.name}: ${message.message}'),
+                  Text(DateFormat('yy/MM/dd').format(now))
+                ],
+              ),
+              if(message.name == FirebaseAuth.instance.currentUser!.displayName)...[
+                IconButton(
+                  icon: const Icon(Icons.delete_outline),
+                  onPressed: (){
+                  },
+                )
+              ]
+            ],
+          ),
+        ],
+        const SizedBox(height: 8),
+      ],
+    );
+  }
+}
+
+class YesNoSelection extends StatelessWidget {
+  const YesNoSelection(
+      {super.key, required this.state, required this.onSelection});
+  final Attending state;
+  final void Function(Attending selection) onSelection;
+
+  @override
+  Widget build(BuildContext context) {
+    switch (state) {
+      case Attending.yes:
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(elevation: 0),
+                onPressed: () => onSelection(Attending.yes),
+                child: const Text('YES'),
+              ),
+              const SizedBox(width: 8),
+              TextButton(
+                onPressed: () => onSelection(Attending.no),
+                child: const Text('NO'),
+              ),
+            ],
+          ),
+        );
+      case Attending.no:
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              TextButton(
+                onPressed: () => onSelection(Attending.yes),
+                child: const Text('YES'),
+              ),
+              const SizedBox(width: 8),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(elevation: 0),
+                onPressed: () => onSelection(Attending.no),
+                child: const Text('NO'),
+              ),
+            ],
+          ),
+        );
+      default:
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              StyledButton(
+                onPressed: () => onSelection(Attending.yes),
+                child: const Text('YES'),
+              ),
+              const SizedBox(width: 8),
+              StyledButton(
+                onPressed: () => onSelection(Attending.no),
+                child: const Text('NO'),
+              ),
+            ],
+          ),
+        );
+    }
+  }
+}

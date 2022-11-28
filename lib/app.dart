@@ -14,6 +14,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:spray/timer.dart';
+import 'board.dart';
 import 'home.dart';
 import 'login.dart';
 import 'map.dart';
@@ -31,6 +32,7 @@ class SprayApp extends StatelessWidget {
         '/': (BuildContext context) => const HomePage(),
         '/login': (BuildContext context) => const LoginPage(),
         '/timer': (BuildContext context) => TimerPage(),
+        '/board': (BuildContext context) => const BoardPage(),
 
       },
     );

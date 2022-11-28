@@ -47,6 +47,8 @@ dependencies:
   d_chart: ^0.1.0
   stop_watch_timer: ^2.0.0
   bottom_bar: ^2.0.3
+  provider: ^6.0.4
+  google_fonts: ^3.0.1
 
 dev_dependencies:
   flutter_test:

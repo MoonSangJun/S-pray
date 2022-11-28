@@ -73,7 +73,6 @@ class LoginPage extends StatelessWidget {
                     Navigator.pushNamed(context,'/')
 
                 );
-
               },
               child: const Text('Anonymous'),
             ),
