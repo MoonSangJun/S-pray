@@ -42,7 +42,7 @@ class Paragraph2 extends StatelessWidget {
       child: Row(
           children:[
             Container(
-              width: 420,
+              width: 300,
               child: Text(
                 content,
                 style: const TextStyle(fontSize: 18),

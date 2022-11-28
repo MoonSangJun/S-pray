@@ -275,7 +275,7 @@ class _State extends State<TimerPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4),
                           child: RoundedButton(
-                            color: Colors.lightBlue,
+                            color: Colors.purple.shade100,
                             onTap: _stopWatchTimer.onStartTimer,
                             child: const Text(
                               'Start',

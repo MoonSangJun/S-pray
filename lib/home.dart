@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
 
   final _children = [
     TimerPage(),
-    BoardPage(),//Group Page
+    BoardPage(),
     HomePage(),
     LoginPage(), // Calender Page
     MapPage(),
