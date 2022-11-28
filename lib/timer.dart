@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:spray/rounded_button.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
+import 'board.dart';
 import 'home.dart';
 import 'login.dart';
 import 'map.dart';
@@ -28,7 +29,7 @@ class _State extends State<TimerPage> {
 
   final _children = [
     TimerPage(),
-    LoginPage(),//Group Page
+    BoardPage(),//Group Page
     HomePage(),
     LoginPage(), // Calender Page
     MapPage(),

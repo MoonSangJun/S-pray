@@ -4,6 +4,8 @@ import 'package:spray/login.dart';
 import 'package:spray/map.dart';
 import 'package:spray/timer.dart';
 
+import 'board.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -16,7 +18,7 @@ class _HomePageState extends State<HomePage> {
 
   final _children = [
     TimerPage(),
-    LoginPage(),//Group Page
+    BoardPage(),//Group Page
     HomePage(),
     LoginPage(), // Calender Page
     MapPage(),
