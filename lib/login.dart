@@ -24,6 +24,7 @@ class LoginPage extends StatelessWidget {
       'email': data.user!.email,
       'uid': data.user!.uid,
       'image': data.user!.photoURL,
+      'praynumber':"0",
     }, SetOptions(merge : true));
     return data.user;
   }
@@ -36,6 +37,7 @@ class LoginPage extends StatelessWidget {
       'uid': data.user!.uid,
       'image': 'http://handong.edu/site/handong/res/img/logo.png',
       'status_message' : 'I promise to take the test honestly before GOD.',
+      'praynumber':"0",
     }, SetOptions(merge : true));
     return data.user;
   }
@@ -70,7 +72,7 @@ class LoginPage extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 signInWithAnonymously().then((value) =>
-                    Navigator.pushNamed(context,'/')
+                    Navigator.pushNamed(context,'/members')
 
                 );
               },

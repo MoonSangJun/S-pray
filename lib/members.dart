@@ -12,81 +12,20 @@ import 'login.dart';
 import 'map.dart';
 
 class MemberPage extends StatefulWidget {
-  static Future<void> navigatorPush(BuildContext context) async {
-    return Navigator.push<void>(
-      context,
-      MaterialPageRoute(
-        builder: (_) => MemberPage(),
-      ),
-    );
-  }
+  const MemberPage({Key? key}) : super(key: key);
 
   @override
-  _State createState() => _State();
+  _MemberPageState createState() => _MemberPageState();
 }
 
-class _State extends State<MemberPage> {
+class _MemberPageState extends State<MemberPage> {
+  CollectionReference user = FirebaseFirestore.instance.collection('users');
 
-  CollectionReference user = FirebaseFirestore.instance.collection('user');
-
-  int _currentPage = 0;
-
-  final _children = [
-    TimerPage(),
-    BoardPage(),//Group Page
-    HomePage(),
-    LoginPage(), // Calender Page
-    MapPage(),
-  ];
-
-  _onTap() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (BuildContext context) => _children[_currentPage])); // this has changed
-  }
-
-  final _pageController = PageController();
-
-  final _isHours = true;
-
-  final StopWatchTimer _stopWatchTimer = StopWatchTimer(
-    mode: StopWatchMode.countUp,
-    onChange: (value) => print('onChange $value'),
-    onChangeRawSecond: (value) => print('onChangeRawSecond $value'),
-    onChangeRawMinute: (value) => print('onChangeRawMinute $value'),
-    onStopped: () {
-      print('onStop');
-    },
-    onEnded: () {
-      print('onEnded');
-    },
-  );
-
-  final _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _stopWatchTimer.rawTime.listen((value) =>
-        print('rawTime $value ${StopWatchTimer.getDisplayTime(value)}'));
-    _stopWatchTimer.minuteTime.listen((value) => print('minuteTime $value'));
-    _stopWatchTimer.secondTime.listen((value) => print('secondTime $value'));
-    _stopWatchTimer.records.listen((value) => print('records $value'));
-    _stopWatchTimer.fetchStopped
-        .listen((value) => print('stopped from stream'));
-    _stopWatchTimer.fetchEnded.listen((value) => print('ended from stream'));
-
-    /// Can be set preset time. This case is "00:01.23".
-    // _stopWatchTimer.setPresetTime(mSec: 1234);
-  }
-
-  @override
-  void dispose() async {
-    super.dispose();
-    await _stopWatchTimer.dispose();
-  }
-
+  // TODO: Add a variable for Category (104)
   @override
   Widget build(BuildContext context) {
+    // TODO: Return an AsymmetricView (104)
+    // TODO: Pass Category variable to AsymmetricView (104)
     return Scaffold(
       drawer: Drawer(
         child: ListView(
@@ -138,27 +77,78 @@ class _State extends State<MemberPage> {
           ],
         ),
       ),
+
       appBar: AppBar(
         backgroundColor: Colors.purple,
-        title: const Text("Timer"), centerTitle: true,
-
-
+        title: const Text("Groups Name"), centerTitle: true,
       ),
-      body:StreamBuilder(
-          stream: user.snapshots(),
-          builder: (BuildContext context,
-              AsyncSnapshot<QuerySnapshot> streamSnapshot){
-            return ListView.builder(
-                itemBuilder: (context, index){
-                  final DocumentSnapshot documentSnapshot =
-                  streamSnapshot.data!.docs[index];
-                  return Card(
-                    child: Text(documentSnapshot['email'].toString(),),
-                  );
-                }
+
+      body: StreamBuilder(
+        stream: user.snapshots(),
+        builder: (BuildContext context,
+            AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+          if (streamSnapshot.hasData) {
+            return GridView.builder(
+              itemCount: streamSnapshot.data!.docs.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+                childAspectRatio: 5.0,
+              ),
+              itemBuilder: (context, index) {
+                final DocumentSnapshot documentSnapshot =
+                streamSnapshot.data!.docs[index];
+                return Card(
+                    margin:
+                    const EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
+                    child: Row(
+                      // TODO: Center items on the card (103)
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
+                            child: Row(
+                              // TODO: Align labels to the bottom and center (103)
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              // TODO: Change innermost Column (103)
+                              children: <Widget>[
+                                SizedBox(
+                                  width: 60,
+                                  height: 40,
+                                  child: Image.network(documentSnapshot['image']),
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  documentSnapshot['email'].toString(),
+                                  style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
+                                  maxLines: 1,
+                                ),
+                                SizedBox(width: 100),
+                                Text(
+                                  "number",
+                                  style: TextStyle(fontSize: 14),
+                                  maxLines: 1,
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  "time",
+                                  style: TextStyle(fontSize: 14),
+                                  maxLines: 1,
+                                ),
+                                //const SizedBox(height: 8.0),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                );
+              },
             );
           }
-      )
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
     );
   }
 }

@@ -20,13 +20,23 @@ class TimerPage extends StatefulWidget {
     );
   }
 
+
   @override
   _State createState() => _State();
 }
 
 class _State extends State<TimerPage> {
 
-  CollectionReference user = FirebaseFirestore.instance.collection('user');
+
+
+  Future<DocumentReference> Count(String count) {
+
+    return FirebaseFirestore.instance
+        .collection('users')
+        .add(<String,dynamic>{
+      'praynumber': count,
+    });
+  }
 
   int _currentPage = 0;
 
@@ -140,7 +150,6 @@ class _State extends State<TimerPage> {
       appBar: AppBar(
         backgroundColor: Colors.purple,
         title: const Text("Timer"), centerTitle: true,
-
 
       ),
       body:
