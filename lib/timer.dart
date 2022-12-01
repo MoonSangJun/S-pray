@@ -1,4 +1,5 @@
 import 'package:bottom_bar/bottom_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:d_chart/d_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:spray/rounded_button.dart';
@@ -24,6 +25,8 @@ class TimerPage extends StatefulWidget {
 }
 
 class _State extends State<TimerPage> {
+
+  CollectionReference user = FirebaseFirestore.instance.collection('user');
 
   int _currentPage = 0;
 

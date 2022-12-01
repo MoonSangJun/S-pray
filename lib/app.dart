@@ -18,6 +18,7 @@ import 'board.dart';
 import 'home.dart';
 import 'login.dart';
 import 'map.dart';
+import 'members.dart';
 
 class SprayApp extends StatelessWidget {
   const SprayApp({Key? key}) : super(key: key);
@@ -33,6 +34,7 @@ class SprayApp extends StatelessWidget {
         '/login': (BuildContext context) => const LoginPage(),
         '/timer': (BuildContext context) => TimerPage(),
         '/board': (BuildContext context) => const BoardPage(),
+        '/members': (BuildContext context) => MemberPage(),
 
       },
     );
