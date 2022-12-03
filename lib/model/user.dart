@@ -9,7 +9,7 @@ class Users  {
     this.image,
     this.uid,
     this.name,
-    this.like,
+    this.liked,
 
   });
 
@@ -18,7 +18,7 @@ class Users  {
   String? image;
   String? name;
   String? status_message;
-  int? like;
+  List<dynamic>? liked;
 
   DocumentReference? reference;
 
@@ -28,7 +28,7 @@ class Users  {
     name = json['name'];
     status_message = json['status_message'];
     email = json['email'];
-    like = json['like'];
+    liked = json['liked'];
 
   }
 

@@ -110,10 +110,21 @@ class _DetailPageState extends State<DetailPage> {
                                           'liked': FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.uid])
                                         });
 
+                                        FirebaseFirestore.instance
+                                            .collection('users')
+                                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                                            .update({
+                                          'liked': FieldValue.arrayRemove([widget.prods.name])
+
+                                        });
+
                                         var snackbar = const SnackBar(
                                           content: Text("그룹에서 탈퇴하였습니다."),
                                         );
                                         ScaffoldMessenger.of(context).showSnackBar(snackbar);
+
+
+
                                       }
                                       // 파베에 없는 경우 array 에 update 시킨다. 스낵바 표시
                                       else {
@@ -123,6 +134,15 @@ class _DetailPageState extends State<DetailPage> {
                                             .update({
                                           'liked': FieldValue.arrayUnion([FirebaseAuth.instance.currentUser!.uid])
                                         });
+
+                                        FirebaseFirestore.instance
+                                            .collection('users')
+                                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                                            .update({
+                                          'liked': FieldValue.arrayUnion([widget.prods.name])
+
+                                        });
+
                                         var snackbar = const SnackBar(content: Text("그룹에 추가되었습니다!"));
                                         ScaffoldMessenger.of(context).showSnackBar(snackbar);
                                       }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_bar/bottom_bar.dart';
@@ -6,6 +7,7 @@ import 'package:spray/map.dart';
 import 'package:spray/timer.dart';
 
 import 'board.dart';
+import 'model/group.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -109,51 +111,56 @@ class _HomePageState extends State<HomePage> {
       PageView(
         controller: _pageController,
         children: [
+          StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .snapshots(),
+              builder: (context , snapshot){
+                List<dynamic> datas = snapshot.data?.get('liked');
+                if(snapshot.data != null){
+                  return
+                        Column(
+                          children: [
+                            SizedBox(height: 80,),
+                            Text("함께 기도해요!"),
+                            Container(
+                              height: 200,
+                              width: 200,
+                              color: Colors.purple.shade100,
+                              child: Text("캠퍼스의 부흥이 일어나도록!"),
+                            ),
+                            SizedBox(height: 80,),
+                            Text("내 그룹"),
+                            Container(
+                              alignment: Alignment.center,
+                                padding: EdgeInsets.fromLTRB(45, 20, 0, 0),
+                                height: 200,
+                                width: 200,
+                                color: Colors.purple.shade100,
+                                child: ListView.builder(
+                                  itemCount: datas.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    String data = datas[index];
+                                    return Text('${data}');
+                                  },
+                                ),
+                              ),
 
-          Column(
-            children: [
-              SizedBox(height: 80,),
-              Text("함께 기도해요!"),
-              Container(
-                height: 200,
-                width: 200,
-                color: Colors.purple.shade100,
-                child: Text("캠퍼스의 부흥이 일어나도록!"),
-              ),
-              SizedBox(height: 80,),
-              Text("내 그룹"),
-              Container(
-                  height: 200,
-                  width: 200,
-                  color: Colors.purple.shade100,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children:  [
-                        Text("한동대학교 19학번"),
-                        Text("사랑의 교회"),
-                        Text("모앱개 팀플"),
-                        Text("한동대학교 19학번"),
-                        Text("사랑의 교회"),
-                        Text("모앱개 팀플"),
-                        Text("한동대학교 19학번"),
-                        Text("사랑의 교회"),
-                        Text("모앱개 팀플"),
-                        Text("한동대학교 19학번"),
-                        Text("사랑의 교회"),
-                        Text("모앱개 팀플"),
-                        Text("한동대학교 19학번"),
-                        Text("사랑의 교회"),
-                        Text("모앱개 팀플"),
-                        Text("한동대학교 19학번"),
-                        Text("사랑의 교회"),
-                        Text("모앱개 팀플"),
-                      ],
-                    ),
-                  )
-              ),
-            ],
-          ),
+                          ],
+                        );
 
+
+
+                }
+                else if (snapshot.hasError){
+                  return const Center(child: CircularProgressIndicator());
+                }
+                else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              }
+          )
 
         ],
         onPageChanged: (index) {
