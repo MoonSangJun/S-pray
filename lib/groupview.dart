@@ -2,8 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:spray/src/detail.dart';
-
+import 'package:spray/detail.dart';
 import 'model/group.dart';
 
 List<Group> gros = [];
@@ -154,9 +153,7 @@ class _GroupPageState extends State<GroupPage> {
                                                     Navigator.of(context).push(
                                                         MaterialPageRoute(
                                                             builder: (context) =>
-                                                                DetailPage(
-                                                                  prods:
-                                                                  datas[index],
+                                                                DetailPage(prods: datas[index],
                                                                 )))
                                                   },
                                                 ),
