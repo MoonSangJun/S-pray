@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
               leading:  Icon(Icons.person, color: Colors.purple.shade100),
               title: const Text('My Profile'),
               onTap: () {
-                Navigator.pushNamed(context, '/my');
+                Navigator.pushNamed(context, '/profile');
               },
             ),
             ListTile(
