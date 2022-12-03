@@ -20,7 +20,6 @@ import 'add.dart';
 import 'board.dart';
 import 'home.dart';
 import 'login.dart';
-import 'map.dart';
 import 'members.dart';
 
 class SprayApp extends StatelessWidget {

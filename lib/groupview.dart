@@ -103,7 +103,8 @@ class _GroupPageState extends State<GroupPage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     List<Group> datas = snapshot.data!;
-                    return GridView.builder(
+                    return
+                      GridView.builder(
                       itemCount: datas.length,
                       itemBuilder: (BuildContext context, int index) {
                         Group data = datas[index];
