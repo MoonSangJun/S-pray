@@ -72,7 +72,7 @@ class LoginPage extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 signInWithAnonymously().then((value) =>
-                    Navigator.pushNamed(context,'/members')
+                    Navigator.pushNamed(context,'/')
 
                 );
               },

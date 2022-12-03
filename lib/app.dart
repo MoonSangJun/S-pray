@@ -13,7 +13,9 @@
 // limitations under the License.
 
 import 'package:flutter/material.dart';
+import 'package:spray/groupview.dart';
 import 'package:spray/timer.dart';
+import 'add.dart';
 import 'board.dart';
 import 'home.dart';
 import 'login.dart';
@@ -35,6 +37,9 @@ class SprayApp extends StatelessWidget {
         '/timer': (BuildContext context) => TimerPage(),
         '/board': (BuildContext context) => const BoardPage(),
         '/members': (BuildContext context) => MemberPage(),
+        '/group': (BuildContext context) => GroupPage(),
+        '/add': (BuildContext context) => AddPage(),
+
 
       },
     );
