@@ -31,7 +31,7 @@ class _AddPageState extends State<AddPage> {
 
   //upload images to Storage
   uploadImage() async {
-    QuerySnapshot _myDoc = await FirebaseFirestore.instance.collection('products').get();
+    QuerySnapshot _myDoc = await FirebaseFirestore.instance.collection('group').get();
     List<DocumentSnapshot> _myDocCount = _myDoc.docs;
     var count = _myDocCount.length;
     print(_myDocCount.length);
@@ -41,7 +41,7 @@ class _AddPageState extends State<AddPage> {
     var file = File(image!.path);
 
     var snapshot =
-    await _firebaseStorage.ref().child('images/product-$count').putFile(file);
+    await _firebaseStorage.ref().child('images/group-$count').putFile(file);
     var downloadUrl = await snapshot.ref.getDownloadURL();
     setState(() {
       imageUrl = downloadUrl;
@@ -68,7 +68,7 @@ class _AddPageState extends State<AddPage> {
     );
     final docRef = db.collection('group').doc(group.name);
     await docRef.set(group.toJson()).then(
-            (value) => log("Products uploaded successfully!"),
+            (value) => log("group uploaded successfully!"),
         onError: (e) => log("Error while uploading!"));
     Navigator.pushNamed(context,'/');
   }
@@ -118,7 +118,7 @@ class _AddPageState extends State<AddPage> {
                   TextField(
                     controller: _name,
                     decoration: InputDecoration(
-                      labelText: 'Product Name',
+                      labelText: 'GroupName',
                     ),
                   ),
                   TextField(

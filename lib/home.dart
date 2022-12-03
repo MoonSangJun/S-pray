@@ -66,6 +66,14 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
+              leading:  Icon(Icons.group_add, color: Colors.purple.shade100),
+              title: const Text('Group'),
+              onTap: () {
+                Navigator.pushNamed(context, '/group');
+              },
+            ),
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
               leading:  Icon(Icons.person, color: Colors.purple.shade100),
               title: const Text('My Profile'),
               onTap: () {
@@ -87,8 +95,14 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.purple,
         title: const Text("Home"), centerTitle: true,
-
-
+        actions: <Widget>[
+          IconButton(
+              icon: const Icon(
+                Icons.add,
+                semanticLabel: 'search',
+              ),
+              onPressed: () => {Navigator.pushNamed(context, '/add')}),
+        ],
       ),
       body:
       PageView(
