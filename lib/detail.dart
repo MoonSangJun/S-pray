@@ -3,8 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../model/group.dart';
-
+import 'model/group.dart';
 
 class DetailPage extends StatefulWidget with ChangeNotifier {
   DetailPage({Key? key, required this.prods}) : super(key: key);
@@ -26,9 +25,8 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    docID = widget.prods.name;
+    docID = widget.prods.uid.toString();
   }
 
   void userLike() async {
@@ -73,16 +71,15 @@ class _DetailPageState extends State<DetailPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Detail"),
+
       ),
       body: Column(
           children: <Widget>[
             Image.network(widget.prods.image!),
-
             Expanded(child: Text(widget.prods.name!)),
             Flexible(child: Text(widget.prods.description!)),
             Flexible(child: Text("creator : < ${widget.prods.uid} >")),
             Flexible(child: Text("${(widget.prods.create_t)?.toDate()} Created")),
-            Flexible(child: Text("${(widget.prods.modify_t)?.toDate()} Modified")),
             // Padding(padding: EdgeInsets.all(50),
             //   child: streamThumbs(context, docID)
             // ),
@@ -92,37 +89,52 @@ class _DetailPageState extends State<DetailPage> {
                   Flexible(
                     child: StreamBuilder<DocumentSnapshot>(
                         stream: FirebaseFirestore.instance
-                            .collection('products')
+                            .collection('group')
                             .doc(widget.prods.name)
                             .snapshots(),
                         builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                           // liked를 가져올 likedArray 생성
                           List<dynamic> likedArray = snapshot.data!.get('liked');
                           if (snapshot.data != null) {
+                            final alreadySaved = likedArray.contains(FirebaseAuth.instance.currentUser!.uid);
                             return Row(
                               children: [
                                 IconButton(
                                   onPressed: () {
+                                    setState(() {
+                                      if (alreadySaved) {
+                                        FirebaseFirestore.instance
+                                            .collection('group')
+                                            .doc(widget.prods.name)
+                                            .update({
+                                          'liked': FieldValue.arrayRemove([FirebaseAuth.instance.currentUser!.uid])
+                                        });
+
+                                        var snackbar = const SnackBar(
+                                          content: Text("그룹에서 탈퇴하였습니다."),
+                                        );
+                                        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                                      }
+                                      // 파베에 없는 경우 array 에 update 시킨다. 스낵바 표시
+                                      else {
+                                        FirebaseFirestore.instance
+                                            .collection('group')
+                                            .doc(widget.prods.name)
+                                            .update({
+                                          'liked': FieldValue.arrayUnion([FirebaseAuth.instance.currentUser!.uid])
+                                        });
+                                        var snackbar = const SnackBar(content: Text("그룹에 추가되었습니다!"));
+                                        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                                      }
+                                    });
                                     //파베에 있는 경우 스낵바 표시
-                                    if (likedArray.contains(FirebaseAuth.instance.currentUser!.uid)) {
-                                      var snackbar = const SnackBar(
-                                        content: Text("You can only do it once!!"),
-                                      );
-                                      ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                                    }
-                                    // 파베에 없는 경우 array 에 update 시킨다. 스낵바 표시
-                                    else {
-                                      FirebaseFirestore.instance
-                                          .collection('products')
-                                          .doc(widget.prods.name)
-                                          .update({
-                                        'liked': FieldValue.arrayUnion([FirebaseAuth.instance.currentUser!.uid])
-                                      });
-                                      var snackbar = const SnackBar(content: Text("I LIKE IT!"));
-                                      ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                                    }
+
                                   },
-                                  icon: Icon(Icons.thumb_up),
+                                  icon: Icon(
+                                    alreadySaved ? Icons.favorite : Icons.favorite_border,
+                                    color: alreadySaved ? Colors.purple : null,
+                                    semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
+                                  ),
                                 ),
                                 Text('${likedArray.length}'),
                               ],
@@ -143,4 +155,3 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 }
-
