@@ -20,10 +20,10 @@ class AddPage extends StatefulWidget {
 
 class _AddPageState extends State<AddPage> {
   final _name = TextEditingController();
-  final _price = TextEditingController();
+  final _location = TextEditingController();
   final _description = TextEditingController();
   final _uid = FirebaseAuth.instance.currentUser!.uid;
-  String imageUrl= 'http://handong.edu/site/handong/res/img/logo.png';
+  String imageUrl= 'https://mblogthumb-phinf.pstatic.net/MjAxNzA2MThfODEg/MDAxNDk3NzExNzEzODM3.prLxdRgEPcgdHtuCpSb_oq1dFOMOs3XmcJYfc6e4dEkg.YYczrm92ql7i7kO8EaRzy3Hr8ysxYVymceHeVORLhwgg.JPEG.charis628/1496480599234.jpg?type=w800';
 
 
   //count the documents
@@ -57,7 +57,7 @@ class _AddPageState extends State<AddPage> {
 
   void groupSession() async {
     final now = FieldValue.serverTimestamp();
-    imageUrl == null ? imageUrl = "http://handong.edu/site/handong/res/img/logo.png" : null;
+    imageUrl == null ? imageUrl = "https://mblogthumb-phinf.pstatic.net/MjAxNzA2MThfODEg/MDAxNDk3NzExNzEzODM3.prLxdRgEPcgdHtuCpSb_oq1dFOMOs3XmcJYfc6e4dEkg.YYczrm92ql7i7kO8EaRzy3Hr8ysxYVymceHeVORLhwgg.JPEG.charis628/1496480599234.jpg?type=w800" : null;
     Group group = Group(
       uid: _uid,
       image: imageUrl,
@@ -104,7 +104,7 @@ class _AddPageState extends State<AddPage> {
                 child: (imageUrl != null)
                     ? Image.network(imageUrl)
                     : Image.network(
-                    'http://handong.edu/site/handong/res/img/logo.png')),
+                    'https://mblogthumb-phinf.pstatic.net/MjAxNzA2MThfODEg/MDAxNDk3NzExNzEzODM3.prLxdRgEPcgdHtuCpSb_oq1dFOMOs3XmcJYfc6e4dEkg.YYczrm92ql7i7kO8EaRzy3Hr8ysxYVymceHeVORLhwgg.JPEG.charis628/1496480599234.jpg?type=w800')),
             Row(
               children: [
                 IconButton(onPressed: uploadImage, icon: Icon(Icons.camera_alt))
@@ -118,19 +118,19 @@ class _AddPageState extends State<AddPage> {
                   TextField(
                     controller: _name,
                     decoration: InputDecoration(
-                      labelText: 'GroupName',
+                      labelText: '그룹이름',
                     ),
                   ),
                   TextField(
-                    controller: _price,
+                    controller: _location,
                     decoration: InputDecoration(
-                      labelText: 'Price',
+                      labelText: '지역',
                     ),
                   ),
                   TextField(
                     controller: _description,
                     decoration: InputDecoration(
-                      labelText: 'Description',
+                      labelText: '기도제목',
                     ),
                   ),
                 ],),))
