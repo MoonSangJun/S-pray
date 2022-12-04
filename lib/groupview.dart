@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
@@ -66,9 +67,17 @@ class _GroupPageState extends State<GroupPage> {
             ListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
               leading:  Icon(Icons.church, color: Colors.purple.shade100),
-              title: const Text('Favorite Group'),
+              title: const Text('Home'),
               onTap: () {
-                Navigator.pushNamed(context, '/hotel');
+                Navigator.pushNamed(context, '/');
+              },
+            ),
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
+              leading:  Icon(Icons.group_add, color: Colors.purple.shade100),
+              title: const Text('Group'),
+              onTap: () {
+                Navigator.pushNamed(context, '/group');
               },
             ),
             ListTile(
@@ -76,16 +85,16 @@ class _GroupPageState extends State<GroupPage> {
               leading:  Icon(Icons.person, color: Colors.purple.shade100),
               title: const Text('My Profile'),
               onTap: () {
-                Navigator.pushNamed(context, '/my');
+                Navigator.pushNamed(context, '/profile');
               },
             ),
             ListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
               leading:  Icon(Icons.logout, color: Colors.purple.shade100),
               title: const Text('Log Out'),
-              onTap: () {
-                Navigator.pop(context);
+              onTap: () async {
                 Navigator.pushNamed(context, '/login');
+                await FirebaseAuth.instance.signOut();
               },
             ),
           ],
@@ -94,6 +103,14 @@ class _GroupPageState extends State<GroupPage> {
       appBar: AppBar(
         backgroundColor: Colors.purple,
         title: const Text("Group"), centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+              icon: const Icon(
+                Icons.add,
+                semanticLabel: 'search',
+              ),
+              onPressed: () => {Navigator.pushNamed(context, '/add')}),
+        ],
       ),
       body: Column(
         children: [
@@ -130,7 +147,7 @@ class _GroupPageState extends State<GroupPage> {
                                               maxLines: 1,
                                             ),
                                             const SizedBox(height: 8.0),
-                                            Text(" ${data.name}"),
+                                            Text(" ${data.description}"),
                                             Row(
                                               mainAxisAlignment:
                                               MainAxisAlignment.end,

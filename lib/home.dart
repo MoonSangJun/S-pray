@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +20,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentPage = 2;
+  var prayTitle = [
+    "북한을 위해 중보합니다." ,
+    "캠퍼스를 위해 기도합시다!",
+    "한동이 하나님의 대학이 되기를!" ,
+    "제 병을 고쳐주세요",
+    "제 친구와의 관계가 회복되기를!",
+    "하나님의 나라와 뜻이 이 땅 가운데!",
+    "하나님을 찬양합니다."
+  ];
 
   final _children = [
     TimerPage(),
@@ -62,9 +73,9 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
               leading:  Icon(Icons.church, color: Colors.purple.shade100),
-              title: const Text('Favorite Group'),
+              title: const Text('Home'),
               onTap: () {
-                Navigator.pushNamed(context, '/hotel');
+                Navigator.pushNamed(context, '/');
               },
             ),
             ListTile(
@@ -125,10 +136,12 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(height: 80,),
                             Text("함께 기도해요!"),
                             Container(
+                              padding: EdgeInsets.fromLTRB(10, 20, 0, 0),
+
                               height: 200,
                               width: 200,
                               color: Colors.purple.shade100,
-                              child: Text("캠퍼스의 부흥이 일어나도록!"),
+                              child: Text("${prayTitle[Random().nextInt(6)]}"),
                             ),
                             SizedBox(height: 80,),
                             Text("내 그룹"),
@@ -142,16 +155,17 @@ class _HomePageState extends State<HomePage> {
                                   itemCount: datas.length,
                                   itemBuilder: (BuildContext context, int index) {
                                     String data = datas[index];
-                                    return Text('${data}');
+                                    if(data == null){
+                                      return Text("그룹에 가입하세요!");
+                                    }
+                                    else
+                                    return Text('- ${data}');
                                   },
                                 ),
                               ),
 
                           ],
                         );
-
-
-
                 }
                 else if (snapshot.hasError){
                   return const Center(child: CircularProgressIndicator());
@@ -161,7 +175,6 @@ class _HomePageState extends State<HomePage> {
                 }
               }
           )
-
         ],
         onPageChanged: (index) {
           // Use a better state management solution

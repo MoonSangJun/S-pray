@@ -25,7 +25,7 @@ class LoginPage extends StatelessWidget {
       'uid': data.user!.uid,
       'image': data.user!.photoURL,
       'praynumber':"0",
-      'liked' : ['그룹에 가입하세요.!'],
+      'liked' : [],
     }, SetOptions(merge : true));
     return data.user;
   }
@@ -39,7 +39,7 @@ class LoginPage extends StatelessWidget {
       'image': 'http://handong.edu/site/handong/res/img/logo.png',
       'status_message' : 'I promise to take the test honestly before GOD.',
       'praynumber':"0",
-      'liked' : ['그룹에 가입하세요.!'],
+      'liked' : [],
     }, SetOptions(merge : true));
     return data.user;
   }

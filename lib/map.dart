@@ -1,6 +1,7 @@
 import 'package:bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:spray/timer.dart';
 import 'board.dart';
 import 'home.dart';
@@ -35,9 +36,13 @@ class _MapPageState extends State<MapPage> {
 
   List<Marker> _markers =[];
 
+  Future<void> requestPermission() async { await Permission.location.request(); }
+
+
   @override
   void initState() {
     super.initState();
+    requestPermission();
     //서울
     _markers.add(
       Marker(

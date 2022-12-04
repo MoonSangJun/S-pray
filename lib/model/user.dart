@@ -10,6 +10,7 @@ class Users  {
     this.uid,
     this.name,
     this.liked,
+    this.prayTitle,
 
   });
 
@@ -19,6 +20,7 @@ class Users  {
   String? name;
   String? status_message;
   List<dynamic>? liked;
+  List<dynamic>? prayTitle;
 
   DocumentReference? reference;
 
@@ -29,6 +31,7 @@ class Users  {
     status_message = json['status_message'];
     email = json['email'];
     liked = json['liked'];
+    prayTitle = json['prayTitle'];
 
   }
 
