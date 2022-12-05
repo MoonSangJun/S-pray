@@ -36,7 +36,8 @@ class LoginPage extends StatelessWidget {
     await FirebaseFirestore.instance.collection('users').doc(data.user!.uid).set({
       'email': 'Anonymous',
       'uid': data.user!.uid,
-      'image': 'https://img.freepik.com/premium-vector/cute-jesus-with-finger-heart-shape_123847-889.jpg',
+      'image': 'http://handong.edu/site/handong/res/img/logo.png',
+      'status_message' : 'I promise to take the test honestly before GOD.',
       'praynumber':"0",
       'liked' : [],
     }, SetOptions(merge : true));
@@ -66,7 +67,6 @@ class LoginPage extends StatelessWidget {
                 signInWithGoogle().then((value) =>
                     Navigator.pushNamed(context,'/')
                 );
-
               },
               child: const Text('Google SIGN IN'),
             ),

@@ -9,6 +9,7 @@ import 'package:spray/map.dart';
 import 'package:spray/timer.dart';
 
 import 'board.dart';
+import 'groupview.dart';
 import 'model/group.dart';
 
 class HomePage extends StatefulWidget {
@@ -32,7 +33,7 @@ class _HomePageState extends State<HomePage> {
 
   final _children = [
     TimerPage(),
-    BoardPage(),
+    GroupPage(),
     HomePage(),
     LoginPage(), // Calender Page
     MapPage(),
@@ -131,41 +132,41 @@ class _HomePageState extends State<HomePage> {
                 List<dynamic> datas = snapshot.data?.get('liked');
                 if(snapshot.data != null){
                   return
-                        Column(
-                          children: [
-                            SizedBox(height: 80,),
-                            Text("함께 기도해요!"),
-                            Container(
-                              padding: EdgeInsets.fromLTRB(10, 20, 0, 0),
+                    Column(
+                      children: [
+                        SizedBox(height: 80,),
+                        Text("함께 기도해요!"),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(10, 20, 0, 0),
 
-                              height: 200,
-                              width: 200,
-                              color: Colors.purple.shade100,
-                              child: Text("${prayTitle[Random().nextInt(6)]}"),
-                            ),
-                            SizedBox(height: 80,),
-                            Text("내 그룹"),
-                            Container(
-                              alignment: Alignment.center,
-                                padding: EdgeInsets.fromLTRB(45, 20, 0, 0),
-                                height: 200,
-                                width: 200,
-                                color: Colors.purple.shade100,
-                                child: ListView.builder(
-                                  itemCount: datas.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    String data = datas[index];
-                                    if(data == null){
-                                      return Text("그룹에 가입하세요!");
-                                    }
-                                    else
-                                    return Text('- ${data}');
-                                  },
-                                ),
-                              ),
+                          height: 200,
+                          width: 200,
+                          color: Colors.purple.shade100,
+                          child: Text("${prayTitle[Random().nextInt(6)]}"),
+                        ),
+                        SizedBox(height: 80,),
+                        Text("내 그룹"),
+                        Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.fromLTRB(45, 20, 0, 0),
+                          height: 200,
+                          width: 200,
+                          color: Colors.purple.shade100,
+                          child: ListView.builder(
+                            itemCount: datas.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              String data = datas[index];
+                              if(data == null){
+                                return Text("그룹에 가입하세요!");
+                              }
+                              else
+                                return Text('- ${data}');
+                            },
+                          ),
+                        ),
 
-                          ],
-                        );
+                      ],
+                    );
                 }
                 else if (snapshot.hasError){
                   return const Center(child: CircularProgressIndicator());
@@ -191,35 +192,32 @@ class _HomePageState extends State<HomePage> {
         },
         items: <BottomBarItem>[
           BottomBarItem(
-            icon: Icon(Icons.timer),
-            title: Text('Timer'),
-            activeColor: Colors.purple
-          ),
-          BottomBarItem(
-            icon: Icon(Icons.group_add),
-            title: Text('Group'),
+              icon: Icon(Icons.timer),
+              title: Text('Timer'),
               activeColor: Colors.purple
           ),
           BottomBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
+              icon: Icon(Icons.group_add),
+              title: Text('Group'),
               activeColor: Colors.purple
           ),
           BottomBarItem(
-            icon: Icon(Icons.calendar_month),
-            title: Text('calendar'),
+              icon: Icon(Icons.home),
+              title: Text('Home'),
               activeColor: Colors.purple
           ),
           BottomBarItem(
-            icon: Icon(Icons.map),
-            title: Text('Map'),
+              icon: Icon(Icons.calendar_month),
+              title: Text('calendar'),
+              activeColor: Colors.purple
+          ),
+          BottomBarItem(
+              icon: Icon(Icons.map),
+              title: Text('Map'),
               activeColor: Colors.purple
           ),
         ],
       ),
     );
   }
-  }
-
-
-
+}

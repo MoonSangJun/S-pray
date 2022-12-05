@@ -15,6 +15,7 @@ class DetailPage extends StatefulWidget with ChangeNotifier {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  CollectionReference user = FirebaseFirestore.instance.collection('users');
   final db = FirebaseFirestore.instance;
 
   final _uid = FirebaseAuth.instance.currentUser!.uid;
@@ -171,6 +172,77 @@ class _DetailPageState extends State<DetailPage> {
                 ],
               ),
             ),
+            Expanded(child:
+            Container(
+              height: 1000,
+              child: StreamBuilder(
+                stream: user.snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                  if (streamSnapshot.hasData) {
+                    return GridView.builder(
+                      itemCount: streamSnapshot.data!.docs.length,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 1,
+                        childAspectRatio: 5.0,
+                      ),
+                      itemBuilder: (context, index) {
+                        final DocumentSnapshot documentSnapshot =
+                        streamSnapshot.data!.docs[index];
+                        return Card(
+                          margin:
+                          const EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
+                          child: Row(
+                            // TODO: Center items on the card (103)
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
+                                  child: Row(
+                                    // TODO: Align labels to the bottom and center (103)
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    // TODO: Change innermost Column (103)
+                                    children: <Widget>[
+                                      SizedBox(
+                                        width: 60,
+                                        height: 40,
+                                        child: Image.network(documentSnapshot['image']),
+                                      ),
+                                      SizedBox(width: 10),
+                                      Text(
+                                        documentSnapshot['email'].toString(),
+                                        style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
+                                        maxLines: 1,
+                                      ),
+                                      SizedBox(width: 100),
+                                      Text(
+                                        "number",
+                                        style: TextStyle(fontSize: 14),
+                                        maxLines: 1,
+                                      ),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        "time",
+                                        style: TextStyle(fontSize: 14),
+                                        maxLines: 1,
+                                      ),
+                                      //const SizedBox(height: 8.0),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }
+                  return Center(child: CircularProgressIndicator());
+                },
+              ),
+            )
+            )
           ]),
     );
   }

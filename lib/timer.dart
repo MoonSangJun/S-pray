@@ -6,6 +6,7 @@ import 'package:spray/rounded_button.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 import 'board.dart';
+import 'groupview.dart';
 import 'home.dart';
 import 'login.dart';
 import 'map.dart';
@@ -42,7 +43,7 @@ class _State extends State<TimerPage> {
 
   final _children = [
     TimerPage(),
-    BoardPage(),//Group Page
+    GroupPage(),//Group Page
     HomePage(),
     LoginPage(), // Calender Page
     MapPage(),
@@ -193,93 +194,6 @@ class _State extends State<TimerPage> {
                       },
                     ),
 
-                    /// Display every minute.
-                    // StreamBuilder<int>(
-                    //   stream: _stopWatchTimer.minuteTime,
-                    //   initialData: _stopWatchTimer.minuteTime.value,
-                    //   builder: (context, snap) {
-                    //     final value = snap.data;
-                    //     print('Listen every minute. $value');
-                    //     return Column(
-                    //       children: <Widget>[
-                    //         Padding(
-                    //             padding: const EdgeInsets.all(8),
-                    //             child: Row(
-                    //               mainAxisAlignment: MainAxisAlignment.center,
-                    //               crossAxisAlignment: CrossAxisAlignment.center,
-                    //               children: <Widget>[
-                    //                 const Padding(
-                    //                   padding: EdgeInsets.symmetric(horizontal: 4),
-                    //                   child: Text(
-                    //                     'minute',
-                    //                     style: TextStyle(
-                    //                       fontSize: 17,
-                    //                       fontFamily: 'Helvetica',
-                    //                     ),
-                    //                   ),
-                    //                 ),
-                    //                 Padding(
-                    //                   padding:
-                    //                   const EdgeInsets.symmetric(horizontal: 4),
-                    //                   child: Text(
-                    //                     value.toString(),
-                    //                     style: const TextStyle(
-                    //                         fontSize: 30,
-                    //                         fontFamily: 'Helvetica',
-                    //                         fontWeight: FontWeight.bold),
-                    //                   ),
-                    //                 ),
-                    //               ],
-                    //             )),
-                    //       ],
-                    //     );
-                    //   },
-                    // ),
-                    //
-                    // /// Display every second.
-                    // StreamBuilder<int>(
-                    //   stream: _stopWatchTimer.secondTime,
-                    //   initialData: _stopWatchTimer.secondTime.value,
-                    //   builder: (context, snap) {
-                    //     final value = snap.data;
-                    //     print('Listen every second. $value');
-                    //     return Column(
-                    //       children: <Widget>[
-                    //         Padding(
-                    //             padding: const EdgeInsets.all(8),
-                    //             child: Row(
-                    //               mainAxisAlignment: MainAxisAlignment.center,
-                    //               crossAxisAlignment: CrossAxisAlignment.center,
-                    //               children: <Widget>[
-                    //                 const Padding(
-                    //                   padding: EdgeInsets.symmetric(horizontal: 4),
-                    //                   child: Text(
-                    //                     'second',
-                    //                     style: TextStyle(
-                    //                       fontSize: 17,
-                    //                       fontFamily: 'Helvetica',
-                    //                     ),
-                    //                   ),
-                    //                 ),
-                    //                 Padding(
-                    //                   padding:
-                    //                   const EdgeInsets.symmetric(horizontal: 4),
-                    //                   child: Text(
-                    //                     value.toString(),
-                    //                     style: const TextStyle(
-                    //                       fontSize: 30,
-                    //                       fontFamily: 'Helvetica',
-                    //                       fontWeight: FontWeight.bold,
-                    //                     ),
-                    //                   ),
-                    //                 ),
-                    //               ],
-                    //             )),
-                    //       ],
-                    //     );
-                    //   },
-                    // ),
-
                     /// Button
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -317,17 +231,11 @@ class _State extends State<TimerPage> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: RoundedButton(
-                            color: Colors.red,
-                            onTap: _stopWatchTimer.onResetTimer,
-                            child: const Text(
-                              'Finish',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
+                        TextButton(
+                            onPressed:(){
+
+                            },
+                            child: Text("SAVE"))
                       ],
                     ),
                     const SizedBox(height: 250),
