@@ -120,19 +120,40 @@ class _BoardPageState extends State<BoardPage> {
                 builder: (context, appState, _) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (appState.loggedIn) ...[
                       const Header('기도제목'),
                       GuestBook(
                         addMessage: (message) =>
                             appState.addMessageToGuestBook(message),
                         messages: appState.guestBookMessages,
                       ),
-                    ],
                   ],
                 ),
               ),
             ],
           ),
+          StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .snapshots(),
+              builder: (context , snapshot){
+                List<dynamic> datas = snapshot.data?.get('liked');
+                if(snapshot.data != null){
+                  return
+                    Column(
+                      children: [
+
+                      ],
+                    );
+                }
+                else if (snapshot.hasError){
+                  return const Center(child: CircularProgressIndicator());
+                }
+                else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              }
+          )
 
 
         ],

@@ -9,9 +9,9 @@ class Users  {
     this.image,
     this.uid,
     this.name,
-    this.liked,
-    this.prayTitle,
-
+    this.like,
+    this.time,
+    this.praynumber,
   });
 
   String? email;
@@ -19,9 +19,10 @@ class Users  {
   String? image;
   String? name;
   String? status_message;
-  List<dynamic>? liked;
-  List<dynamic>? prayTitle;
-
+  int? like;
+  Timestamp? time;
+  String? praynumber;
+  
   DocumentReference? reference;
 
   Users.fromJson(dynamic json, this.reference){
@@ -30,9 +31,9 @@ class Users  {
     name = json['name'];
     status_message = json['status_message'];
     email = json['email'];
-    liked = json['liked'];
-    prayTitle = json['prayTitle'];
-
+    like = json['like'];
+    time = json['time'];
+    praynumber = json['praynumber'];
   }
 
 
