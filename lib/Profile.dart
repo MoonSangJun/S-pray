@@ -69,7 +69,7 @@ class _ProfileState extends State<Profile> {
                       const Divider(
                         height: 40,
                         thickness: 1,
-                        color: Colors.deepPurple,
+                        color: Colors.deepPurpleAccent,
                       ),
                       const SizedBox(height: 50),
                       const Text(

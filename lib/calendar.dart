@@ -52,6 +52,7 @@ class _CalendarPageState extends State<CalendarPage> {
     DateTime(2022, 12, 1),
     DateTime(2022, 12, 2),
     DateTime(2022, 12, 5),
+    DateTime(2022, 12, 6),
   ];
 
     // DateTiem(ddd.year, ddd.month, ddd.day),
