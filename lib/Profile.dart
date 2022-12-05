@@ -104,14 +104,6 @@ class _ProfileState extends State<Profile> {
                             fontSize: 17,
                           )),
                       const SizedBox(height: 50),
-                      Text(
-                        "    ${data.status_message!}",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25,
-                        ),
-                      )
                     ]))
               ],
             );
