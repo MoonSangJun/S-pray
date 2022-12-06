@@ -27,6 +27,7 @@ class Group  {
     this.modify_t,
     this.liked,
     this.reference,
+    this.location,
 
   });
 
@@ -39,6 +40,7 @@ class Group  {
   Timestamp? modify_t;
   List<dynamic>? liked;
   DocumentReference? reference;
+  String? location;
 
   Group.fromJson(dynamic json, this.reference){
     uid = json['uid'];
@@ -47,6 +49,7 @@ class Group  {
     description = json['description'];
     create_t = json['create_timestamp'];
     liked = json['liked'];
+    location = json['location'];
 
   }
 
@@ -57,6 +60,7 @@ class Group  {
     "description" : description,
     "create_timestamp" : create_timestamp,
     'liked' : liked,
+    'location' : location
   };
 
   Group.fromQuerySnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)

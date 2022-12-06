@@ -46,13 +46,13 @@ class _CalendarPageState extends State<CalendarPage> {
   final _calendarControllerCustom =
   AdvancedCalendarController.custom(DateTime.now());
   //final ddd = DateTime.parse('${DateTime.fromMillisecondsSinceEpoch(Users.time)}');
-  // final List<DateTime> events = [
-  //   DateTime.now(),
-  //   DateTime(2022, 12, 1),
-  //   DateTime(2022, 12, 2),
-  //   DateTime(2022, 12, 5),
-  //   DateTime(2022, 12, 6),
-  // ];
+  final List<DateTime> events = [
+    DateTime.now(),
+    DateTime(2022, 12, 1),
+    DateTime(2022, 12, 2),
+    DateTime(2022, 12, 5),
+    DateTime(2022, 12, 6),
+  ];
 
     // DateTiem(ddd.year, ddd.month, ddd.day),
   @override
@@ -102,7 +102,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   ),
                   child: AdvancedCalendar(
                     controller: _calendarControllerCustom,
-                    // events: events,
+                    events: events,
                     weekLineHeight: 48.0,
                     startWeekDay: 1,
                     innerDot: true,

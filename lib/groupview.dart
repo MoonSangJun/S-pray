@@ -147,7 +147,7 @@ class _GroupPageState extends State<GroupPage> {
                                               maxLines: 1,
                                             ),
                                             const SizedBox(height: 8.0),
-                                            Text(" ${data.description}"),
+                                            Text(" ${data.description} - <${data.location} >"),
                                             Row(
                                               mainAxisAlignment:
                                               MainAxisAlignment.end,

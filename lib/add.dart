@@ -20,11 +20,30 @@ class AddPage extends StatefulWidget {
 
 class _AddPageState extends State<AddPage> {
   final _name = TextEditingController();
-  final _location = TextEditingController();
   final _description = TextEditingController();
   final _uid = FirebaseAuth.instance.currentUser!.uid;
   String imageUrl= 'https://mblogthumb-phinf.pstatic.net/MjAxNzA2MThfODEg/MDAxNDk3NzExNzEzODM3.prLxdRgEPcgdHtuCpSb_oq1dFOMOs3XmcJYfc6e4dEkg.YYczrm92ql7i7kO8EaRzy3Hr8ysxYVymceHeVORLhwgg.JPEG.charis628/1496480599234.jpg?type=w800';
 
+  List<bool> _isChecked = [
+    false,  // 서울/경기
+    false,  // 강원도
+    false,  // 충청도
+    false,  // 전라도
+    false,  // 경상도
+    false,  // 제주도
+  ];
+
+  List<String> _selected =[
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ];
+
+  String? _location;
 
   //count the documents
 
@@ -63,6 +82,7 @@ class _AddPageState extends State<AddPage> {
       image: imageUrl,
       name: _name.text,
       description: _description.text,
+      location: _location,
       create_timestamp: now,
       liked : list,
     );
@@ -70,15 +90,29 @@ class _AddPageState extends State<AddPage> {
     await docRef.set(group.toJson()).then(
             (value) => log("group uploaded successfully!"),
         onError: (e) => log("Error while uploading!"));
-    Navigator.pushNamed(context,'/');
+    Navigator.pushNamed(context,'/group');
   }
 
 
   @override
   Widget build(BuildContext context) {
+    Color getColor(Set<MaterialState> states) {
+      const Set<MaterialState> interactiveStates = <MaterialState>{
+        MaterialState.pressed,
+        MaterialState.hovered,
+        MaterialState.focused,
+      };
+
+      if (states.any(interactiveStates.contains)) {
+        return Colors.deepPurple;
+      }
+      return Colors.deepPurple;
+    }
+
     return Scaffold(
 
         appBar: AppBar(
+          backgroundColor: Colors.purple,
 
           leading: TextButton(
             child: Text("Cancel",style: TextStyle(color: Colors.white,fontSize: 10),),
@@ -87,6 +121,7 @@ class _AddPageState extends State<AddPage> {
             },
           ),
           title: Text('Add'),
+
           centerTitle: true,
 
           actions: <Widget>[
@@ -121,12 +156,152 @@ class _AddPageState extends State<AddPage> {
                       labelText: '그룹이름',
                     ),
                   ),
-                  TextField(
-                    controller: _location,
-                    decoration: InputDecoration(
-                      labelText: '지역',
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child:
+                    Row(
+                      children: [
+                        Row(
+                          children: [
+                            Checkbox(
+                              checkColor: Colors.white,
+                              fillColor: MaterialStateProperty.resolveWith(
+                                  getColor),
+                              value: _isChecked[0],
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  _isChecked[0] = value!;
+
+                                  if(_isChecked[0]){
+                                    _location = "서울/경기";
+                                  }
+
+                                  else
+                                    _selected[0] = "";
+                                });
+                              },
+                            ),
+                            Text("서울/경기")
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Checkbox(
+                              checkColor: Colors.white,
+                              fillColor: MaterialStateProperty.resolveWith(
+                                  getColor),
+                              value: _isChecked[1],
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  _isChecked[1] = value!;
+
+                                  if(_isChecked[1]){
+                                    _location ="강원도";
+;                                  }
+
+                                  else
+                                    _selected[1] ="";
+                                });
+                              },
+                            ),
+                            Text("강원도")
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Checkbox(
+                              checkColor: Colors.white,
+                              fillColor: MaterialStateProperty.resolveWith(
+                                  getColor),
+                              value: _isChecked[2],
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  _isChecked[2] = value!;
+
+                                  if(_isChecked[2]){
+                                    _location = "충청도";
+                                  }
+
+                                  else
+                                    _selected[2] ="";
+                                });
+                              },
+                            ),
+                            Text("충청도")
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Checkbox(
+                              checkColor: Colors.white,
+                              fillColor: MaterialStateProperty.resolveWith(
+                                  getColor),
+                              value: _isChecked[3],
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  _isChecked[3] = value!;
+
+                                  if(_isChecked[3]){
+                                    _location = "전라도";
+
+                                  }
+                                  else
+                                    _selected[3] ="";
+                                });
+                              },
+                            ),
+                            Text("전라도")
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Checkbox(
+                              checkColor: Colors.white,
+                              fillColor: MaterialStateProperty.resolveWith(
+                                  getColor),
+                              value: _isChecked[4],
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  _isChecked[4] = value!;
+
+                                  if(_isChecked[4]){
+                                    _location = "경상도";
+                                  }
+                                  else
+                                    _selected[4] ="";
+                                });
+                              },
+                            ),
+                            Text("경상도")
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Checkbox(
+                              checkColor: Colors.white,
+                              fillColor: MaterialStateProperty.resolveWith(
+                                  getColor),
+                              value: _isChecked[5],
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  _isChecked[5] = value!;
+
+                                  if(_isChecked[5]){
+                                    _location = "제주도";
+                                  }
+                                  else
+                                    _selected[5] ="";
+                                });
+                              },
+                            ),
+                            Text("제주도")
+                          ],
+                        ),
+
+                      ],
                     ),
                   ),
+
                   TextField(
                     controller: _description,
                     decoration: InputDecoration(

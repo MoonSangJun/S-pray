@@ -71,7 +71,7 @@ class _DetailPageState extends State<DetailPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Detail"),
+        title: Text(widget.prods.name!),
 
       ),
       body: Column(
@@ -172,9 +172,10 @@ class _DetailPageState extends State<DetailPage> {
                 ],
               ),
             ),
-            Expanded(child:
+            Expanded(
+                child:
             Container(
-              height: 1000,
+
               child: StreamBuilder(
                 stream: user.snapshots(),
                 builder: (BuildContext context,
