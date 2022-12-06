@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_bar/bottom_bar.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:spray/calendar.dart';
 import 'package:spray/map.dart';
 import 'package:spray/timer.dart';
@@ -17,6 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _prayTitle = TextEditingController();
   int _currentPage = 2;
   var prayTitle = [
     "북한을 위해 중보합니다." ,
@@ -42,6 +44,57 @@ class _HomePageState extends State<HomePage> {
   }
 
   final _pageController = PageController();
+
+  @override
+  void initState(){
+    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+      showBannerDialog();
+    });
+    super.initState();
+  }
+
+  showBannerDialog(){
+
+    return
+      showDialog(
+        context: context,
+        builder: (context) => StatefulBuilder(builder: (context,setState){
+
+          return
+            AlertDialog(
+              title: const Text('함께 기도할게요!'),
+              content:  TextField(
+                controller: _prayTitle,
+                decoration: InputDecoration(
+                  labelText: '기도제목을 입력 해주세요.',
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'Cancel'),
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .update(
+                      {
+                        'prayTitle': FieldValue.arrayUnion([_prayTitle])
+                      }
+                    );
+                    Navigator.pop(context, 'OK');
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+
+        })
+
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,48 +182,50 @@ class _HomePageState extends State<HomePage> {
                 List<dynamic> datas = snapshot.data?.get('liked');
                 if(snapshot.data != null){
                   return
-                    Column(
-                      children: [
-                        SizedBox(height: 80,),
-                        Text("함께 기도해요!"),
-                        SizedBox(height: 8,),
-                        Container(
-                          padding: EdgeInsets.fromLTRB(10, 20, 0, 0),
+                    SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          SizedBox(height: 80,),
+                          Text("함께 기도해요!"),
+                          SizedBox(height: 8,),
+                          Container(
+                            padding: EdgeInsets.fromLTRB(10, 20, 0, 0),
 
-                          height: 200,
-                          width: 200,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            color: Colors.purple.shade100,
+                            height: 200,
+                            width: 200,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: Colors.purple.shade100,
+                            ),
+                            child: Text("${prayTitle[Random().nextInt(6)]}"),
                           ),
-                          child: Text("${prayTitle[Random().nextInt(6)]}"),
-                        ),
-                        SizedBox(height: 80,),
-                        Text("내 그룹"),
-                        SizedBox(height: 8,),
-                        Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.fromLTRB(45, 20, 0, 0),
-                          height: 200,
-                          width: 200,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            color: Colors.purple.shade100,
+                          SizedBox(height: 80,),
+                          Text("내 그룹"),
+                          SizedBox(height: 8,),
+                          Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.fromLTRB(45, 20, 0, 0),
+                            height: 200,
+                            width: 200,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: Colors.purple.shade100,
+                            ),
+                            child: ListView.builder(
+                              itemCount: datas.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                String data = datas[index];
+                                if(data == null){
+                                  return Text("그룹에 가입하세요!");
+                                }
+                                else
+                                  return Text('- ${data}');
+                              },
+                            ),
                           ),
-                          child: ListView.builder(
-                            itemCount: datas.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              String data = datas[index];
-                              if(data == null){
-                                return Text("그룹에 가입하세요!");
-                              }
-                              else
-                                return Text('- ${data}');
-                            },
-                          ),
-                        ),
 
-                      ],
+                        ],
+                      ),
                     );
                 }
                 else if (snapshot.hasError){
@@ -223,6 +278,9 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+
+        resizeToAvoidBottomInset: true
+
     );
   }
 }

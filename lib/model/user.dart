@@ -12,6 +12,8 @@ class Users  {
     this.like,
     this.time,
     this.praynumber,
+    this.totaltime,
+    this.prayTitle,
   });
 
   String? email;
@@ -21,7 +23,9 @@ class Users  {
   String? status_message;
   int? like;
   Timestamp? time;
-  String? praynumber;
+  int? praynumber;
+  int? totaltime;
+  List<String>? prayTitle;
   
   DocumentReference? reference;
 
@@ -34,6 +38,8 @@ class Users  {
     like = json['like'];
     time = json['time'];
     praynumber = json['praynumber'];
+    totaltime = json['totaltime'];
+    prayTitle = json['prayTitle'];
   }
 
 

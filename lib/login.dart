@@ -26,6 +26,9 @@ class LoginPage extends StatelessWidget {
       'image': data.user!.photoURL,
       'praynumber':"0",
       'liked' : [],
+      'prayTitle':[],
+      'praynumber': 0,
+      'total_time' : 0,
     }, SetOptions(merge : true));
     return data.user;
   }
@@ -39,6 +42,9 @@ class LoginPage extends StatelessWidget {
       'image': 'https://img.freepik.com/premium-vector/cute-jesus-with-finger-heart-shape_123847-889.jpg',
       'praynumber':"0",
       'liked' : [],
+      'prayTitle':[],
+      'praynumber': 0,
+      'total_time' : 0,
     }, SetOptions(merge : true));
     return data.user;
   }
