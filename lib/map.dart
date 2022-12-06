@@ -1,4 +1,5 @@
 import 'package:bottom_bar/bottom_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -36,6 +37,34 @@ class _MapPageState extends State<MapPage> {
   List<Marker> _markers =[];
 
   Future<void> requestPermission() async { await Permission.location.request(); }
+
+  // showBannerDialog(){
+  //   return
+  //     showDialog(
+  //         context: context,
+  //         builder: (context) => StatefulBuilder(builder: (context,setState){
+  //           return
+  //             AlertDialog(
+  //               title: const Text('${FirebaseFirestore.instance.collection('pray').doc("pray").get()}'),
+  //               content:  TextField(
+  //                 decoration: InputDecoration(
+  //                   labelText: '기도제목을 입력 해주세요.',
+  //                 ),
+  //
+  //               ),
+  //               actions: <Widget>[
+  //                 TextButton(
+  //                   onPressed: () => Navigator.pop(context, 'Cancel'),
+  //                   child: const Text('Cancel'),
+  //                 ),
+  //               ],
+  //             );
+  //
+  //         })
+  //
+  //     );
+  // }
+
 
 
   @override
@@ -147,7 +176,7 @@ class _MapPageState extends State<MapPage> {
                 leading:  Icon(Icons.church, color: Colors.purple.shade100),
                 title: const Text('Favorite Group'),
                 onTap: () {
-                  Navigator.pushNamed(context, '/hotel');
+                  Navigator.pushNamed(context, '/home');
                 },
               ),
               ListTile(

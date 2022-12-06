@@ -54,7 +54,7 @@ class _MemberPageState extends State<MemberPage> {
               leading:  Icon(Icons.church, color: Colors.purple.shade100),
               title: const Text('Favorite Group'),
               onTap: () {
-                Navigator.pushNamed(context, '/hotel');
+                Navigator.pushNamed(context, '/home');
               },
             ),
             ListTile(

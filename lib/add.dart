@@ -24,6 +24,7 @@ class _AddPageState extends State<AddPage> {
   final _uid = FirebaseAuth.instance.currentUser!.uid;
   String imageUrl= 'https://mblogthumb-phinf.pstatic.net/MjAxNzA2MThfODEg/MDAxNDk3NzExNzEzODM3.prLxdRgEPcgdHtuCpSb_oq1dFOMOs3XmcJYfc6e4dEkg.YYczrm92ql7i7kO8EaRzy3Hr8ysxYVymceHeVORLhwgg.JPEG.charis628/1496480599234.jpg?type=w800';
 
+
   List<bool> _isChecked = [
     false,  // 서울/경기
     false,  // 강원도
@@ -87,6 +88,17 @@ class _AddPageState extends State<AddPage> {
       liked : list,
     );
     final docRef = db.collection('group').doc(group.name);
+
+    FirebaseFirestore.instance
+        .collection('pray')
+        .doc('praySet')
+        .update(
+        {
+          'prayTitle': FieldValue.arrayUnion([_description.text])
+        }
+    );
+
+
     await docRef.set(group.toJson()).then(
             (value) => log("group uploaded successfully!"),
         onError: (e) => log("Error while uploading!"));
@@ -133,7 +145,7 @@ class _AddPageState extends State<AddPage> {
         ),
 
         body:
-        
+
         SingleChildScrollView(
           child: Column(
             children: [

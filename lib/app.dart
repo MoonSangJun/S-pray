@@ -29,10 +29,11 @@ class SprayApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return MaterialApp(
-      title: 'Shrine',
+      title: 'Spray',
       initialRoute: '/login',
+      debugShowCheckedModeBanner: false,
       routes: {
-        '/': (BuildContext context) => const HomePage(),
+        '/home': (BuildContext context) => const HomePage(),
         '/login': (BuildContext context) => const LoginPage(),
         '/timer': (BuildContext context) => TimerPage(),
         '/board': (BuildContext context) => const BoardPage(),
@@ -40,8 +41,6 @@ class SprayApp extends StatelessWidget {
         '/group': (BuildContext context) => GroupPage(),
         '/add': (BuildContext context) => AddPage(),
         '/profile': (BuildContext context) => Profile(),
-
-
 
       },
     );

@@ -30,7 +30,8 @@ void main() async {
 
   runApp(ChangeNotifierProvider(
     create: (context) => ApplicationState(),
-    builder: ((context, child) => const SprayApp()),
+    builder: ((context, child) => const SprayApp(
+    )),
   ));
 
 
