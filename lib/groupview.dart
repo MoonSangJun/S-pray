@@ -138,46 +138,53 @@ class _GroupPageState extends State<GroupPage> {
                                     Expanded(
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text(
-                                              data.name!,
-                                              maxLines: 1,
-                                            ),
-                                            const SizedBox(height: 8.0),
-                                            Text(" ${data.description} - <${data.location} >"),
-                                            Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                              children: [
-                                                TextButton(
-                                                  child: const Text("more"),
-                                                  style: TextButton.styleFrom(
-                                                    padding: EdgeInsets.zero,
-                                                    minimumSize: Size.zero,
-                                                    textStyle: const TextStyle(
-                                                        fontSize: 10,
-                                                        overflow:
-                                                        TextOverflow.ellipsis),
-                                                    tapTargetSize:
-                                                    MaterialTapTargetSize
-                                                        .shrinkWrap,
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                "[${data.name!}]",
+                                                textAlign: TextAlign.center,
+                                                selectionColor: Colors.deepPurple,
+                                                maxLines: 1,
+                                              ),
+                                              const SizedBox(height: 8.0),
+                                              Text(" ${data.description}"),
+                                              const SizedBox(height: 8.0),
+                                              Text("<${data.location} >"),
+
+                                              Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                                children: [
+                                                  TextButton(
+                                                    child: const Text("more"),
+                                                    style: TextButton.styleFrom(
+                                                      padding: EdgeInsets.zero,
+                                                      minimumSize: Size.zero,
+                                                      textStyle: const TextStyle(
+                                                          fontSize: 10,
+                                                          overflow:
+                                                          TextOverflow.ellipsis),
+                                                      tapTargetSize:
+                                                      MaterialTapTargetSize
+                                                          .shrinkWrap,
+                                                    ),
+                                                    onPressed: () => {
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  DetailPage(prods: datas[index],
+                                                                  )))
+                                                    },
                                                   ),
-                                                  onPressed: () => {
-                                                    Navigator.of(context).push(
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                DetailPage(prods: datas[index],
-                                                                )))
-                                                  },
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
