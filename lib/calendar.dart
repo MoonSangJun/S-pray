@@ -77,7 +77,7 @@ class _CalendarPageState extends State<CalendarPage> {
               children: [
                 // AdvancedCalendar(
                 //   controller: _calendarControllerToday,
-                //   events: events,
+                //   // events: events,
                 //   startWeekDay: 1,
                 // ),
                 Theme(

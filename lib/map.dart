@@ -54,21 +54,53 @@ class _MapPageState extends State<MapPage> {
       ),
     );
 
-    //부산
+    //충청
     _markers.add(
       Marker(
           markerId: MarkerId("2"),
           draggable: true,
           onTap: () => print("Marker!"),
-          position: LatLng(35.1771 , 129.045)
+          position: LatLng(36.5571, 126.9605)
       ),
     );
+
+    //강원도
     _markers.add(
       Marker(
-          markerId: MarkerId("2"),
+          markerId: MarkerId("3"),
           draggable: true,
           onTap: () => print("Marker!"),
-          position: LatLng(35.1771 , 129.045)
+          position: LatLng(37.818 , 128.1614)
+      ),
+    );
+
+    //제주도
+    _markers.add(
+      Marker(
+          markerId: MarkerId("4"),
+          draggable: true,
+          onTap: () => print("Marker!"),
+          position: LatLng(33.3778 , 126.568)
+      ),
+    );
+
+    //전라도
+    _markers.add(
+      Marker(
+          markerId: MarkerId("5"),
+          draggable: true,
+          onTap: () => print("Marker!"),
+          position: LatLng(35.5279 , 127.0496)
+      ),
+    );
+
+    //경상도
+    _markers.add(
+      Marker(
+          markerId: MarkerId("6"),
+          draggable: true,
+          onTap: () => print("Marker!"),
+          position: LatLng(35.8142 , 128.9886)
       ),
     );
 

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_bar/bottom_bar.dart';
+import 'package:spray/calendar.dart';
 import 'package:spray/login.dart';
 import 'package:spray/map.dart';
 import 'package:spray/timer.dart';
@@ -35,7 +36,7 @@ class _HomePageState extends State<HomePage> {
     TimerPage(),
     GroupPage(),
     HomePage(),
-    LoginPage(), // Calender Page
+    CalendarPage(), // Calender Page
     MapPage(),
   ];
 
