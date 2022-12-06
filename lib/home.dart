@@ -137,22 +137,30 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         SizedBox(height: 80,),
                         Text("함께 기도해요!"),
+                        SizedBox(height: 8,),
                         Container(
                           padding: EdgeInsets.fromLTRB(10, 20, 0, 0),
 
                           height: 200,
                           width: 200,
-                          color: Colors.purple.shade100,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: Colors.purple.shade100,
+                          ),
                           child: Text("${prayTitle[Random().nextInt(6)]}"),
                         ),
                         SizedBox(height: 80,),
                         Text("내 그룹"),
+                        SizedBox(height: 8,),
                         Container(
                           alignment: Alignment.center,
                           padding: EdgeInsets.fromLTRB(45, 20, 0, 0),
                           height: 200,
                           width: 200,
-                          color: Colors.purple.shade100,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: Colors.purple.shade100,
+                          ),
                           child: ListView.builder(
                             itemCount: datas.length,
                             itemBuilder: (BuildContext context, int index) {
