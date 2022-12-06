@@ -24,7 +24,7 @@ class RoundedButton extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         foregroundColor: color,
-        shape: const StadiumBorder().copyWith(side: side),
+        //shape: const StadiumBorder().copyWith(side: side),
         disabledBackgroundColor: disableColor ?? Colors.grey,
         elevation: elevation,
       ),
@@ -33,3 +33,5 @@ class RoundedButton extends StatelessWidget {
     );
   }
 }
+
+

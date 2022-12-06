@@ -1,9 +1,15 @@
 import 'package:bottom_bar/bottom_bar.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:spray/timer.dart';
+import 'board.dart';
+import 'calendar.dart';
 import 'groupview.dart';
 import 'home.dart';
 import 'login.dart';
@@ -21,9 +27,9 @@ class _MapPageState extends State<MapPage> {
 
   final _children = [
     TimerPage(),
-    GroupPage(),//Group Page
+    BoardPage(),
     HomePage(),
-    LoginPage(), // Calender Page
+    CalendarPage(), // Calender Page
     MapPage(),
   ];
 
@@ -174,9 +180,21 @@ class _MapPageState extends State<MapPage> {
               ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
                 leading:  Icon(Icons.church, color: Colors.purple.shade100),
-                title: const Text('Favorite Group'),
+                title: const Text('Home'),
                 onTap: () {
+
                   Navigator.pushNamed(context, '/home');
+
+
+                },
+              ),
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
+                leading:  Icon(Icons.group_add, color: Colors.purple.shade100),
+                title: const Text('Group'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/group');
+
                 },
               ),
               ListTile(
@@ -184,16 +202,16 @@ class _MapPageState extends State<MapPage> {
                 leading:  Icon(Icons.person, color: Colors.purple.shade100),
                 title: const Text('My Profile'),
                 onTap: () {
-                  Navigator.pushNamed(context, '/my');
+                  Navigator.pushNamed(context, '/profile');
                 },
               ),
               ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
                 leading:  Icon(Icons.logout, color: Colors.purple.shade100),
                 title: const Text('Log Out'),
-                onTap: () {
-                  Navigator.pop(context);
+                onTap: () async {
                   Navigator.pushNamed(context, '/login');
+                  await FirebaseAuth.instance.signOut();
                 },
               ),
             ],

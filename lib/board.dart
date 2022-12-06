@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:spray/timer.dart';
 
+import 'calendar.dart';
 import 'firebase_options.dart';
 import 'home.dart';
 import 'login.dart';
@@ -32,9 +33,9 @@ class _BoardPageState extends State<BoardPage> {
 
   final _children = [
     TimerPage(),
-    BoardPage(),//Group Page
+    BoardPage(),
     HomePage(),
-    LoginPage(), // Calender Page
+    CalendarPage(), // Calender Page
     MapPage(),
   ];
 
@@ -72,9 +73,17 @@ class _BoardPageState extends State<BoardPage> {
             ListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
               leading:  Icon(Icons.church, color: Colors.purple.shade100),
-              title: const Text('Favorite Group'),
+              title: const Text('Home'),
               onTap: () {
-                Navigator.pushNamed(context, '/hotel');
+                Navigator.pushNamed(context, '/');
+              },
+            ),
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
+              leading:  Icon(Icons.group_add, color: Colors.purple.shade100),
+              title: const Text('Group'),
+              onTap: () {
+                Navigator.pushNamed(context, '/group');
               },
             ),
             ListTile(
@@ -82,16 +91,16 @@ class _BoardPageState extends State<BoardPage> {
               leading:  Icon(Icons.person, color: Colors.purple.shade100),
               title: const Text('My Profile'),
               onTap: () {
-                Navigator.pushNamed(context, '/my');
+                Navigator.pushNamed(context, '/profile');
               },
             ),
             ListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
               leading:  Icon(Icons.logout, color: Colors.purple.shade100),
               title: const Text('Log Out'),
-              onTap: () {
-                Navigator.pop(context);
+              onTap: () async {
                 Navigator.pushNamed(context, '/login');
+                await FirebaseAuth.instance.signOut();
               },
             ),
           ],

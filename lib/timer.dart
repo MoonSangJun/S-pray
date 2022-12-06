@@ -1,6 +1,7 @@
 import 'package:bottom_bar/bottom_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:d_chart/d_chart.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:spray/rounded_button.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -29,14 +30,11 @@ class TimerPage extends StatefulWidget {
 class _State extends State<TimerPage> {
 
 
-
-  Future<DocumentReference> Count(String count) {
-
-    return FirebaseFirestore.instance
+  void updateDoc(String count) {
+    FirebaseFirestore.instance
         .collection('users')
-        .add(<String,dynamic>{
-      'praynumber': count,
-    });
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({'praynumber' : count});
   }
 
   int _currentPage = 0;
@@ -123,9 +121,17 @@ class _State extends State<TimerPage> {
             ListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
               leading:  Icon(Icons.church, color: Colors.purple.shade100),
-              title: const Text('Favorite Group'),
+              title: const Text('Home'),
               onTap: () {
-                Navigator.pushNamed(context, '/hotel');
+                Navigator.pushNamed(context, '/');
+              },
+            ),
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
+              leading:  Icon(Icons.group_add, color: Colors.purple.shade100),
+              title: const Text('Group'),
+              onTap: () {
+                Navigator.pushNamed(context, '/group');
               },
             ),
             ListTile(
@@ -133,16 +139,16 @@ class _State extends State<TimerPage> {
               leading:  Icon(Icons.person, color: Colors.purple.shade100),
               title: const Text('My Profile'),
               onTap: () {
-                Navigator.pushNamed(context, '/my');
+                Navigator.pushNamed(context, '/profile');
               },
             ),
             ListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
               leading:  Icon(Icons.logout, color: Colors.purple.shade100),
               title: const Text('Log Out'),
-              onTap: () {
-                Navigator.pop(context);
+              onTap: () async {
                 Navigator.pushNamed(context, '/login');
+                await FirebaseAuth.instance.signOut();
               },
             ),
           ],
@@ -168,7 +174,7 @@ class _State extends State<TimerPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    const SizedBox(height: 100),
+                    const SizedBox(height: 70),
                     /// Display stop watch time
                     StreamBuilder<int>(
                       stream: _stopWatchTimer.rawTime,
@@ -194,54 +200,68 @@ class _State extends State<TimerPage> {
                       },
                     ),
 
-                    /// Button
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: RoundedButton(
-                            color: Colors.purple.shade100,
-                            onTap: _stopWatchTimer.onStartTimer,
-                            child: const Text(
-                              'Start',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: RoundedButton(
-                            color: Colors.green,
-                            onTap: _stopWatchTimer.onStopTimer,
-                            child: const Text(
-                              'Stop',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: RoundedButton(
-                            color: Colors.red,
-                            onTap: _stopWatchTimer.onResetTimer,
-                            child: const Text(
-                              'Reset',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        TextButton(
-                            onPressed:(){
-
-                            },
-                            child: Text("SAVE"))
-                      ],
+                    StreamBuilder(
+                        stream: _stopWatchTimer.rawTime,
+                        initialData: _stopWatchTimer.rawTime.value,
+                        builder: (context, snap){
+                          final value = snap.data!;
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 4),
+                                child: RoundedButton(
+                                  color: Colors.purple.shade100,
+                                  onTap: _stopWatchTimer.onStartTimer,
+                                  child: const Text(
+                                    'Start',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 4),
+                                child: RoundedButton(
+                                  color: Colors.green,
+                                  onTap: _stopWatchTimer.onStopTimer,
+                                  child: const Text(
+                                    'Stop',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 4),
+                                child: RoundedButton(
+                                  color: Colors.red,
+                                  onTap: _stopWatchTimer.onResetTimer,
+                                  child: const Text(
+                                    'Reset',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                              ElevatedButton(
+                                  onPressed:(){
+                                    FirebaseFirestore.instance
+                                        .collection('users')
+                                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                                        .update({
+                                      'praynumber' : 5,
+                                      'total_time': value});
+                                  },
+                                  child: Text("SAVE"))
+                            ],
+                          );
+                        }
                     ),
-                    const SizedBox(height: 250),
+                    /// Button
+
+                    const SizedBox(height: 200),
                     Padding(
                       padding: EdgeInsets.all(16),
-                      child: AspectRatio(
+                      child:
+                      AspectRatio(
                         aspectRatio: 16 / 9,
                         child: DChartBar(
                           data: [
