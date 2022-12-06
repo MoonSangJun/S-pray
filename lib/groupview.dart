@@ -1,9 +1,14 @@
+import 'package:bottom_bar/bottom_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:spray/detail.dart';
+import 'package:spray/timer.dart';
+import 'calendar.dart';
+import 'home.dart';
+import 'map.dart';
 import 'model/group.dart';
 
 List<Group> gros = [];
@@ -38,6 +43,22 @@ class _GroupPageState extends State<GroupPage> {
     return groups;
   }
 
+  int _currentPage = 1;
+  final _children = [
+    TimerPage(),
+    GroupPage(),
+    HomePage(),
+    CalendarPage(), // Calender Page
+    MapPage(),
+  ];
+
+  _onTap() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (BuildContext context) => _children[_currentPage])); // this has changed
+  }
+
+  final _pageController = PageController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +90,7 @@ class _GroupPageState extends State<GroupPage> {
               leading:  Icon(Icons.church, color: Colors.purple.shade100),
               title: const Text('Home'),
               onTap: () {
-                Navigator.pushNamed(context, '/');
+                Navigator.pushNamed(context, '/home');
               },
             ),
             ListTile(
@@ -100,7 +121,8 @@ class _GroupPageState extends State<GroupPage> {
           ],
         ),
       ),
-      appBar: AppBar(
+      appBar:
+        AppBar(
         backgroundColor: Colors.purple,
         title: const Text("Group"), centerTitle: true,
         actions: <Widget>[
@@ -112,109 +134,154 @@ class _GroupPageState extends State<GroupPage> {
               onPressed: () => {Navigator.pushNamed(context, '/add')}),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: FutureBuilder<List<Group>>(
-                future: getDataASC(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    List<Group> datas = snapshot.data!;
-                    return
-                      GridView.builder(
-                      itemCount: datas.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        Group data = datas[index];
+      body:
+        PageView(
+          controller: _pageController,
+          children: [
+            Column(
+              children: [
+                Expanded(
+                  child: FutureBuilder<List<Group>>(
+                      future: getDataASC(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          List<Group> datas = snapshot.data!;
+                          return
+                            GridView.builder(
+                              itemCount: datas.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                Group data = datas[index];
 
-                        return Card(
-                                clipBehavior: Clip.antiAlias,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
+                                return Card(
+                                  clipBehavior: Clip.antiAlias,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
 
-                                    AspectRatio(
-                                        aspectRatio: 18 / 11,
-                                        child: Image.network(data.image!)),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text(
-                                                "[${data.name!}]",
-                                                textAlign: TextAlign.center,
-                                                selectionColor: Colors.deepPurple,
-                                                maxLines: 1,
-                                              ),
-                                              const SizedBox(height: 8.0),
-                                              Text(" ${data.description}"),
-                                              const SizedBox(height: 8.0),
-                                              Text("<${data.location} >"),
+                                      AspectRatio(
+                                          aspectRatio: 18 / 11,
+                                          child: Image.network(data.image!)),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text(
+                                                  "[${data.name!}]",
+                                                  selectionColor: Colors.deepPurple,
+                                                  maxLines: 1,
+                                                ),
+                                                const SizedBox(height: 8.0),
+                                                Text(" ${data.description}"),
+                                                const SizedBox(height: 8.0),
+                                                Text("<${data.location} >"),
 
-                                              Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                                children: [
-                                                  TextButton(
-                                                    child: const Text("more"),
-                                                    style: TextButton.styleFrom(
-                                                      padding: EdgeInsets.zero,
-                                                      minimumSize: Size.zero,
-                                                      textStyle: const TextStyle(
-                                                          fontSize: 10,
-                                                          overflow:
-                                                          TextOverflow.ellipsis),
-                                                      tapTargetSize:
-                                                      MaterialTapTargetSize
-                                                          .shrinkWrap,
+                                                Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                                  children: [
+                                                    TextButton(
+                                                      child: const Text("more"),
+                                                      style: TextButton.styleFrom(
+                                                        padding: EdgeInsets.zero,
+                                                        minimumSize: Size.zero,
+                                                        textStyle: const TextStyle(
+                                                            fontSize: 10,
+                                                            overflow:
+                                                            TextOverflow.ellipsis),
+                                                        tapTargetSize:
+                                                        MaterialTapTargetSize
+                                                            .shrinkWrap,
+                                                      ),
+                                                      onPressed: () => {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    DetailPage(prods: datas[index],
+                                                                    )))
+                                                      },
                                                     ),
-                                                    onPressed: () => {
-                                                      Navigator.of(context).push(
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  DetailPage(prods: datas[index],
-                                                                  )))
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              );
+                                    ],
+                                  ),
+                                );
 
-                      },
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 8 / 9,
-                      ),
-                    );
-                  }
-                  else if (snapshot.hasError) {
-                    return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Error: ${snapshot.error}',
-                          style: TextStyle(fontSize: 15),
-                        ));
-                  }
-                  else {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                }),
-          )
+                              },
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 8 / 9,
+                              ),
+                            );
+                        }
+                        else if (snapshot.hasError) {
+                          return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Error: ${snapshot.error}',
+                                style: TextStyle(fontSize: 15),
+                              ));
+                        }
+                        else {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                      }),
+                )
 
+              ],
+            )
+          ],
+          onPageChanged: (index) {
+            setState(() => _currentPage = index);
+          },
+        ),
+      bottomNavigationBar:
+        BottomBar(
+        selectedIndex: _currentPage,
+        onTap: (int index) {
+          _pageController.jumpToPage(index);
+          setState(() => _currentPage = index);
+          _onTap();
+        },
+        items: <BottomBarItem>[
+          BottomBarItem(
+              icon: Icon(Icons.timer),
+              title: Text('Timer'),
+              activeColor: Colors.purple
+          ),
+          BottomBarItem(
+              icon: Icon(Icons.group_add),
+              title: Text('Group'),
+              activeColor: Colors.purple
+          ),
+          BottomBarItem(
+              icon: Icon(Icons.home),
+              title: Text('Home'),
+              activeColor: Colors.purple
+          ),
+          BottomBarItem(
+              icon: Icon(Icons.calendar_month),
+              title: Text('calendar'),
+              activeColor: Colors.purple
+          ),
+          BottomBarItem(
+              icon: Icon(Icons.map),
+              title: Text('Map'),
+              activeColor: Colors.purple
+          ),
         ],
-      )
+      ),
+
 
     );
   }

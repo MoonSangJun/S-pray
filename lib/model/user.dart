@@ -13,7 +13,6 @@ class Users  {
     this.time,
     this.praynumber,
     this.totaltime,
-    this.prayTitle,
   });
 
   String? email;
@@ -25,8 +24,7 @@ class Users  {
   Timestamp? time;
   int? praynumber;
   int? totaltime;
-  List<String>? prayTitle;
-  
+
   DocumentReference? reference;
 
   Users.fromJson(dynamic json, this.reference){
@@ -39,7 +37,6 @@ class Users  {
     time = json['time'];
     praynumber = json['praynumber'];
     totaltime = json['totaltime'];
-    prayTitle = json['prayTitle'];
   }
 
 

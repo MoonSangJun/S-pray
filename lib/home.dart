@@ -8,6 +8,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:spray/calendar.dart';
 import 'package:spray/map.dart';
 import 'package:spray/timer.dart';
+import 'package:unicons/unicons.dart';
 import 'groupview.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,7 +20,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _prayTitle = TextEditingController();
-  int _currentPage = 2;
   var prayTitle = [
     "북한을 위해 중보합니다." ,
     "캠퍼스를 위해 기도합시다!",
@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
     "하나님의 나라와 뜻이 이 땅 가운데!",
     "하나님을 찬양합니다."
   ];
-
+  int _currentPage = 2;
   final _children = [
     TimerPage(),
     GroupPage(),
@@ -45,13 +45,15 @@ class _HomePageState extends State<HomePage> {
 
   final _pageController = PageController();
 
-  @override
-  void initState(){
-    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
-      showBannerDialog();
-    });
-    super.initState();
-  }
+  // @override
+  // void initState(){
+  //   SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+  //     showBannerDialog();
+  //   });
+  //   super.initState();
+  // }
+
+
 
   showBannerDialog(){
 
@@ -59,15 +61,15 @@ class _HomePageState extends State<HomePage> {
       showDialog(
         context: context,
         builder: (context) => StatefulBuilder(builder: (context,setState){
-
           return
             AlertDialog(
               title: const Text('함께 기도할게요!'),
               content:  TextField(
-                controller: _prayTitle,
                 decoration: InputDecoration(
                   labelText: '기도제목을 입력 해주세요.',
                 ),
+                controller: _prayTitle,
+
               ),
               actions: <Widget>[
                 TextButton(
@@ -77,13 +79,19 @@ class _HomePageState extends State<HomePage> {
                 TextButton(
                   onPressed: () {
                     FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .collection('pray')
+                        .doc('praySet')
                         .update(
                       {
-                        'prayTitle': FieldValue.arrayUnion([_prayTitle])
+                        'prayTitle': FieldValue.arrayUnion([_prayTitle.text])
                       }
                     );
+                    // FirebaseFirestore.instance.collection("pray").doc("pray").set(
+                    //   {
+                    //     'praytitle' : ;
+                    //   }
+                    // );
+                    _prayTitle.clear();
                     Navigator.pop(context, 'OK');
                   },
                   child: const Text('OK'),
@@ -99,8 +107,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
+      drawer:
+        Drawer(
+          child:
+            ListView(
           padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
@@ -126,7 +136,7 @@ class _HomePageState extends State<HomePage> {
               leading:  Icon(Icons.church, color: Colors.purple.shade100),
               title: const Text('Home'),
               onTap: () {
-                Navigator.pushNamed(context, '/');
+                Navigator.pushNamed(context, '/home');
               },
             ),
             ListTile(
@@ -156,8 +166,9 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-      ),
-      appBar: AppBar(
+        ),
+      appBar:
+        AppBar(
         backgroundColor: Colors.purple,
         title: const Text("Home"), centerTitle: true,
         actions: <Widget>[
@@ -167,10 +178,16 @@ class _HomePageState extends State<HomePage> {
                 semanticLabel: 'search',
               ),
               onPressed: () => {Navigator.pushNamed(context, '/add')}),
+          IconButton(
+              icon: const Icon(
+                UniconsLine.megaphone
+              ),
+              onPressed: () => {showBannerDialog()},
+          )
         ],
       ),
       body:
-      PageView(
+        PageView(
         controller: _pageController,
         children: [
           StreamBuilder<DocumentSnapshot>(
@@ -179,71 +196,77 @@ class _HomePageState extends State<HomePage> {
                   .doc(FirebaseAuth.instance.currentUser!.uid)
                   .snapshots(),
               builder: (context , snapshot){
-                List<dynamic> datas = snapshot.data?.get('liked');
-                if(snapshot.data != null){
-                  return
-                    SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          SizedBox(height: 80,),
-                          Text("함께 기도해요!"),
-                          SizedBox(height: 8,),
-                          Container(
-                            padding: EdgeInsets.fromLTRB(10, 20, 0, 0),
+                return StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                  .collection('pray').doc('praySet').snapshots(),
+                  builder: (context1, snapshot1){
+                    List<dynamic> datas = snapshot.data?.get('liked');
+                    List<dynamic> prays = snapshot1.data?.get("prayTitle");
+                    if(snapshot.data != null){
+                      return
+                        SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 80,),
+                              Text("함께 기도해요!"),
+                              SizedBox(height: 8,),
+                              Container(
+                                padding: EdgeInsets.fromLTRB(10, 20, 0, 0),
+                                height: 200,
+                                width: 350,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: Colors.purple.shade100,
+                                ),
+                                child: Text("${prays[Random().nextInt(prays.length)]}"),
+                              ),
+                              SizedBox(height: 80,),
+                              Text("내 그룹"),
+                              SizedBox(height: 8,),
+                              Container(
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.fromLTRB(45, 20, 0, 0),
+                                height: 200,
+                                width: 350,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: Colors.purple.shade100,
+                                ),
+                                child: ListView.builder(
+                                  itemCount: datas.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    String data = datas[index];
+                                    if(data == null){
+                                      return Text("그룹에 가입하세요!");
+                                    }
+                                    else
+                                      return Text('- ${data}');
+                                  },
+                                ),
+                              ),
 
-                            height: 200,
-                            width: 200,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              color: Colors.purple.shade100,
-                            ),
-                            child: Text("${prayTitle[Random().nextInt(6)]}"),
+                            ],
                           ),
-                          SizedBox(height: 80,),
-                          Text("내 그룹"),
-                          SizedBox(height: 8,),
-                          Container(
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.fromLTRB(45, 20, 0, 0),
-                            height: 200,
-                            width: 200,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              color: Colors.purple.shade100,
-                            ),
-                            child: ListView.builder(
-                              itemCount: datas.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                String data = datas[index];
-                                if(data == null){
-                                  return Text("그룹에 가입하세요!");
-                                }
-                                else
-                                  return Text('- ${data}');
-                              },
-                            ),
-                          ),
+                        );
+                    }
+                    else if (snapshot.hasError){
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  }
+                );
 
-                        ],
-                      ),
-                    );
-                }
-                else if (snapshot.hasError){
-                  return const Center(child: CircularProgressIndicator());
-                }
-                else {
-                  return const Center(child: CircularProgressIndicator());
-                }
               }
           )
         ],
         onPageChanged: (index) {
-          // Use a better state management solution
-          // setState is used for simplicity
           setState(() => _currentPage = index);
         },
       ),
-      bottomNavigationBar: BottomBar(
+      bottomNavigationBar:
+        BottomBar(
         selectedIndex: _currentPage,
         onTap: (int index) {
           _pageController.jumpToPage(index);

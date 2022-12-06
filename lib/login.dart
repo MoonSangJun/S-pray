@@ -52,8 +52,6 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
         body: Container(
           constraints: BoxConstraints.expand(),
@@ -84,7 +82,7 @@ class LoginPage extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     signInWithGoogle().then((value) =>
-                        Navigator.pushNamed(context,'/')
+                        Navigator.pushNamed(context,'/home')
                     );
                   },
                   style: ButtonStyle(
@@ -107,7 +105,7 @@ class LoginPage extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     signInWithAnonymously().then((value) =>
-                        Navigator.pushNamed(context,'/')
+                        Navigator.pushNamed(context,'/home')
 
                     );
                   },
@@ -128,7 +126,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: (){
-                    Navigator.pushNamed(context, '/');
+                    Navigator.pushNamed(context, '/home');
                   },
                   child: Text('home'),
                 )
