@@ -1,5 +1,6 @@
 import 'package:bottom_bar/bottom_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_calendar/flutter_advanced_calendar.dart';
 import 'package:spray/map.dart';
@@ -63,6 +64,64 @@ class _CalendarPageState extends State<CalendarPage> {
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       home: Scaffold(
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: const BoxDecoration(
+                  color: Colors.purple,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.all(13.0),
+                      child: Text(
+                        'Spray',
+                        style: TextStyle(color: Colors.white, fontSize: 30),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
+                leading:  Icon(Icons.church, color: Colors.purple.shade100),
+                title: const Text('Home'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/');
+                },
+              ),
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
+                leading:  Icon(Icons.group_add, color: Colors.purple.shade100),
+                title: const Text('Group'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/group');
+                },
+              ),
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
+                leading:  Icon(Icons.person, color: Colors.purple.shade100),
+                title: const Text('My Profile'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/profile');
+                },
+              ),
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
+                leading:  Icon(Icons.logout, color: Colors.purple.shade100),
+                title: const Text('Log Out'),
+                onTap: () async {
+                  Navigator.pushNamed(context, '/login');
+                  await FirebaseAuth.instance.signOut();
+                },
+              ),
+            ],
+          ),
+        ),
         appBar: AppBar(
           backgroundColor: Colors.purple,
           title: const Text("Calendar"), centerTitle: true,
