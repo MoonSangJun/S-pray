@@ -37,7 +37,6 @@ class LoginPage extends StatelessWidget {
       'email': 'Anonymous',
       'uid': data.user!.uid,
       'image': 'https://img.freepik.com/premium-vector/cute-jesus-with-finger-heart-shape_123847-889.jpg',
-      'status_message' : 'I promise to take the test honestly before GOD.',
       'praynumber':"0",
       'liked' : [],
     }, SetOptions(merge : true));
@@ -50,38 +49,87 @@ class LoginPage extends StatelessWidget {
 
 
     return Scaffold(
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          children: <Widget>[
-            const SizedBox(height: 80.0),
-            Column(
+        body: Container(
+          constraints: BoxConstraints.expand(),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/spray.png"),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: SafeArea(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
               children: <Widget>[
-                const SizedBox(height: 16.0),
-                const Text('SPRAY'),
+                const SizedBox(height: 80.0),
+                Column(
+                  children:
+                  <Widget>[
+                    const SizedBox(height: 16.0),
+                    const Text('S\'PRAY',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 50,
+                          fontStyle: FontStyle.italic,
+                        )),
+                  ],
+                ),
+                const SizedBox(height: 150.0),
+                ElevatedButton(
+                  onPressed: () {
+                    signInWithGoogle().then((value) =>
+                        Navigator.pushNamed(context,'/')
+                    );
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.purple.shade100),
+                    overlayColor: MaterialStateProperty.all(Colors.purple),
+                    padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                  ),
+                  child: const Text('Google SIGN IN',
+                      style: TextStyle(
+                        fontSize: 20,
+                      )
+                  ),
+                ),
+                const SizedBox(height: 30.0),
+                ElevatedButton(
+                  onPressed: () {
+                    signInWithAnonymously().then((value) =>
+                        Navigator.pushNamed(context,'/')
+
+                    );
+                  },
+                  child: const Text('Anonymous',
+                      style: TextStyle(
+                        fontSize: 20,
+                      )),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.purple.shade100),
+                    overlayColor: MaterialStateProperty.all(Colors.purple),
+                    padding: MaterialStateProperty.all(const EdgeInsets.all(15)),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: (){
+                    Navigator.pushNamed(context, '/');
+                  },
+                  child: Text('home'),
+                )
               ],
             ),
-            const SizedBox(height: 120.0),
-            ElevatedButton(
-              onPressed: () {
-                signInWithGoogle().then((value) =>
-                    Navigator.pushNamed(context,'/')
-                );
-              },
-              child: const Text('Google SIGN IN'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                signInWithAnonymously().then((value) =>
-                    Navigator.pushNamed(context,'/')
-
-                );
-              },
-              child: const Text('Anonymous'),
-            ),
-          ],
-        ),
-      ),
+          ),
+        )
     );
   }
 }

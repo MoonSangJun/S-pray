@@ -5,13 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_bar/bottom_bar.dart';
 import 'package:spray/calendar.dart';
-import 'package:spray/login.dart';
 import 'package:spray/map.dart';
 import 'package:spray/timer.dart';
-
-import 'board.dart';
 import 'groupview.dart';
-import 'model/group.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
