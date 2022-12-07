@@ -205,54 +205,78 @@ class _State extends State<TimerPage> {
                         initialData: _stopWatchTimer.rawTime.value,
                         builder: (context, snap){
                           final value = snap.data!;
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 4),
-                                child: RoundedButton(
-                                  color: Colors.purple.shade100,
-                                  onTap: _stopWatchTimer.onStartTimer,
-                                  child: const Text(
-                                    'Start',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 4),
-                                child: RoundedButton(
-                                  color: Colors.green,
-                                  onTap: _stopWatchTimer.onStopTimer,
-                                  child: const Text(
-                                    'Stop',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 4),
-                                child: RoundedButton(
-                                  color: Colors.red,
-                                  onTap: _stopWatchTimer.onResetTimer,
-                                  child: const Text(
-                                    'Reset',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                              ElevatedButton(
-                                  onPressed:(){
-                                    FirebaseFirestore.instance
-                                        .collection('users')
-                                        .doc(FirebaseAuth.instance.currentUser!.uid)
-                                        .update({
-                                      'praynumber' : 5,
-                                      'total_time': value});
-                                  },
-                                  child: Text("SAVE"))
-                            ],
+                          return
+                            StreamBuilder(
+
+                              stream: FirebaseFirestore
+                                  .instance
+                                  .collection('users')
+                                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                                  .snapshots(),
+
+                              builder:(context1 , snapshot1){
+                                var data = snapshot1.data?.get('total_time');
+                                if(snapshot1.data != null) {
+                                  return Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                                      child: RoundedButton(
+                                        color: Colors.purple.shade100,
+                                        onTap: _stopWatchTimer.onStartTimer,
+                                        child: const Text(
+                                          'Start',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                                      child: RoundedButton(
+                                        color: Colors.green,
+                                        onTap: _stopWatchTimer.onStopTimer,
+                                        child: const Text(
+                                          'Stop',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                                      child: RoundedButton(
+                                        color: Colors.red,
+                                        onTap: _stopWatchTimer.onResetTimer,
+                                        child: const Text(
+                                          'Reset',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                        onPressed:(){
+                                          FirebaseFirestore.instance
+                                              .collection('users')
+                                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                                              .update({
+                                            'praynumber' : 5,
+                                            'total_time': data+value});
+                                          _stopWatchTimer.onResetTimer();
+                                        },
+
+                                        child: Text("SAVE"))
+                                  ],
+                                );
+                                } else if (snapshot1.hasError){
+                                  return const Center(child: CircularProgressIndicator());
+                                }
+                                else {
+                                  return const Center(child: CircularProgressIndicator());
+                                }
+
+                              }
                           );
+
                         }
                     ),
                     /// Button

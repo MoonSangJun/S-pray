@@ -8,6 +8,7 @@ import 'package:spray/timer.dart';
 import 'package:spray/board.dart';
 import 'package:spray/home.dart';
 
+import 'groupview.dart';
 import 'model/user.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -31,7 +32,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   final _children = [
     TimerPage(),
-    BoardPage(),
+    GroupPage(),
     HomePage(),
     CalendarPage(), // Calender Page
     MapPage(),
@@ -46,16 +47,20 @@ class _CalendarPageState extends State<CalendarPage> {
   final _calendarControllerToday = AdvancedCalendarController.today();
   final _calendarControllerCustom =
   AdvancedCalendarController.custom(DateTime.now());
-  //final ddd = DateTime.parse('${DateTime.fromMillisecondsSinceEpoch(Users.time)}');
-  final List<DateTime> events = [
-    DateTime.now(),
-    DateTime(2022, 12, 1),
-    DateTime(2022, 12, 2),
-    DateTime(2022, 12, 5),
-    DateTime(2022, 12, 6),
-  ];
+  final _uid = FirebaseAuth.instance.currentUser!.uid;
 
-    // DateTiem(ddd.year, ddd.month, ddd.day),
+  //final List<dynamic> date = ${DateTime.fromMillisecondsSinceEpoch(Users.date)};
+  //Users data = snapshot.data!;
+  //List<dynamic> date = snapshot.data?.get('liked');
+  // final List<DateTime> events = [
+  //   DateTime.now(),
+  //   DateTime(2022, 12, 1),
+  //   DateTime(2022, 12, 2),
+  //   DateTime(2022, 12, 5),
+  //   DateTime(2022, 12, 6),
+  // ];
+
+  // DateTiem(ddd.year, ddd.month, ddd.day),
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -79,7 +84,7 @@ class _CalendarPageState extends State<CalendarPage> {
                     Padding(
                       padding: EdgeInsets.all(13.0),
                       child: Text(
-                        'Spray',
+                        'S\'PRAY',
                         style: TextStyle(color: Colors.white, fontSize: 30),
                       ),
                     ),
@@ -128,55 +133,95 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
         body:
         PageView(
-          controller: _pageController,
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // AdvancedCalendar(
-                //   controller: _calendarControllerToday,
-                //   // events: events,
-                //   startWeekDay: 1,
-                // ),
-                Theme(
-                  data: ThemeData.light().copyWith(
-                    textTheme: ThemeData.light().textTheme.copyWith(
-                      subtitle1: ThemeData.light().textTheme.subtitle1?.copyWith(
-                        fontSize: 16,
-                        color: theme.colorScheme.secondary,
-                      ),
-                      bodyText1: ThemeData.light().textTheme.bodyText1?.copyWith(
-                        fontSize: 14,
-                        color: Colors.black54,
-                      ),
-                      bodyText2: ThemeData.light().textTheme.bodyText1?.copyWith(
-                        fontSize: 12,
-                        color: Colors.black87,
-                      ),
+            controller: _pageController,
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: FutureBuilder<Users>(
+                      future: getUser(_uid),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          Users data = snapshot.data!;
+                          List<DateTime> before = data.date!;
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 30),
+                              Container(
+                                width: 300,
+                                height: 250,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: Image.network(
+                                    data.image!,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                                child: Theme(
+                                  data: ThemeData.light().copyWith(
+                                    textTheme: ThemeData.light().textTheme.copyWith(
+                                      subtitle1: ThemeData.light().textTheme.subtitle1?.copyWith(
+                                        fontSize: 16,
+                                        color: theme.colorScheme.secondary,
+                                      ),
+                                      bodyText1: ThemeData.light().textTheme.bodyText1?.copyWith(
+                                        fontSize: 14,
+                                        color: Colors.black54,
+                                      ),
+                                      bodyText2: ThemeData.light().textTheme.bodyText1?.copyWith(
+                                        fontSize: 12,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    primaryColor: Colors.purple,
+                                    highlightColor: Colors.purple.shade100,
+                                    disabledColor: Colors.green,
+                                  ),
+                                  child: AdvancedCalendar(
+                                    controller: _calendarControllerCustom,
+                                    events: before,
+                                    weekLineHeight: 48.0,
+                                    startWeekDay: 1,
+                                    innerDot: true,
+                                    keepLineSize: true,
+                                    calendarTextStyle: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w400,
+                                      height: 1.3125,
+                                      letterSpacing: 0,
+                                    ),
+                                  ),
+                                ),)
+                            ],
+                          );
+                        } else if (snapshot.hasError) {
+                          return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'Error: ${snapshot.error}',
+                                style: TextStyle(fontSize: 15),
+                              ));
+                        } else {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                      },
                     ),
-                    primaryColor: Colors.purple,
-                    highlightColor: Colors.purple.shade100,
-                    disabledColor: Colors.green,
                   ),
-                  child: AdvancedCalendar(
-                    controller: _calendarControllerCustom,
-                    events: events,
-                    weekLineHeight: 48.0,
-                    startWeekDay: 1,
-                    innerDot: true,
-                    keepLineSize: true,
-                    calendarTextStyle: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                      height: 1.3125,
-                      letterSpacing: 0,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ]
+                  // AdvancedCalendar(
+                  //   controller: _calendarControllerToday,
+                  //   // events: events,
+                  //   startWeekDay: 1,
+                  // ),
+                ],
+              ),
+            ]
         ),
 
         bottomNavigationBar: BottomBar(
