@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 
 class Users  {
@@ -13,6 +14,7 @@ class Users  {
     this.time,
     this.praynumber,
     this.totaltime,
+    this.date,
   });
 
   String? email;
@@ -24,6 +26,7 @@ class Users  {
   Timestamp? time;
   int? praynumber;
   int? totaltime;
+  List<DateTime>? date;
 
   DocumentReference? reference;
 
@@ -37,6 +40,7 @@ class Users  {
     time = json['time'];
     praynumber = json['praynumber'];
     totaltime = json['totaltime'];
+    date = json['date'];
   }
 
 

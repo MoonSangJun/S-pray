@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'model/group.dart';
+import 'model/user.dart';
 
 
 class AddPage extends StatefulWidget {
@@ -71,7 +72,7 @@ class _AddPageState extends State<AddPage> {
 
   //Create products data to Firestore Database.
 
-  List<String>? list = [];
+  List<Users>? list = [];
 
   final db = FirebaseFirestore.instance;
 
@@ -129,7 +130,7 @@ class _AddPageState extends State<AddPage> {
           leading: TextButton(
             child: Text("Cancel",style: TextStyle(color: Colors.white,fontSize: 10),),
             onPressed: () {
-              Navigator.pushNamed(context,'/');
+              Navigator.pushNamed(context,'/home');
             },
           ),
           title: Text('Add'),

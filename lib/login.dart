@@ -29,6 +29,7 @@ class LoginPage extends StatelessWidget {
       'prayTitle':[],
       'praynumber': 0,
       'total_time' : 0,
+      'date' : [],
     }, SetOptions(merge : true));
     return data.user;
   }
@@ -45,6 +46,7 @@ class LoginPage extends StatelessWidget {
       'prayTitle':[],
       'praynumber': 0,
       'total_time' : 0,
+      'date' : [],
     }, SetOptions(merge : true));
     return data.user;
   }
@@ -106,8 +108,16 @@ class LoginPage extends StatelessWidget {
                   onPressed: () {
                     signInWithAnonymously().then((value) =>
                         Navigator.pushNamed(context,'/home')
-
                     );
+
+                    FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .update(
+                        {
+                          'date': FieldValue.arrayUnion([DateTime.now()])
+                        });
+
                   },
                   child: const Text('Anonymous',
                       style: TextStyle(
@@ -127,6 +137,15 @@ class LoginPage extends StatelessWidget {
                 TextButton(
                   onPressed: (){
                     Navigator.pushNamed(context, '/home');
+
+
+                    FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .update(
+                        {
+                          'date': FieldValue.arrayUnion([DateTime.now()])
+                        });
                   },
                   child: Text('home'),
                 )
