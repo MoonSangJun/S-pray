@@ -30,7 +30,7 @@ class _MapPageState extends State<MapPage> {
 
   final _children = [
     TimerPage(),
-    BoardPage(),
+    GroupPage(),
     HomePage(),
     CalendarPage(), // Calender Page
     MapPage(),

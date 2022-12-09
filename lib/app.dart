@@ -36,7 +36,7 @@ class SprayApp extends StatelessWidget {
         '/home': (BuildContext context) => const HomePage(),
         '/login': (BuildContext context) => const LoginPage(),
         '/timer': (BuildContext context) => TimerPage(),
-        '/board': (BuildContext context) => const BoardPage(),
+        //'/board': (BuildContext context) => const BoardPage(),
         '/members': (BuildContext context) => MemberPage(),
         '/group': (BuildContext context) => GroupPage(),
         '/add': (BuildContext context) => AddPage(),
