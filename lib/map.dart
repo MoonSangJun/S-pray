@@ -6,13 +6,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:spray/timer.dart';
 import 'board.dart';
 import 'calendar.dart';
+import 'detail.dart';
 import 'groupview.dart';
 import 'home.dart';
 import 'login.dart';
+import 'model/group.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -71,6 +74,274 @@ class _MapPageState extends State<MapPage> {
   //     );
   // }
 
+  //서울 바텀슅
+  Widget SeoulBottomSheet(BuildContext context){
+    return 
+        StreamBuilder<DocumentSnapshot>
+          (
+            stream: FirebaseFirestore.instance
+            .collection('location')
+            .doc('location')
+            .snapshots(),
+            
+            builder: (context, snapshot){
+              List<dynamic> datas = snapshot.data?.get('서울');
+              
+              if(snapshot.data != null){
+               return Container(
+                  child:
+                  ListView.builder(
+                    itemCount: datas.length,
+                    itemBuilder: (BuildContext context, int index){
+                      String data = datas[index];
+                      return ListTile(
+                        leading: Icon(Icons.church, color: Colors.purple.shade100),
+                        title: Text('${data}'),
+
+                      );
+                    }
+                  ),
+
+                );
+            }
+              else if (snapshot.hasError){
+                return const Center(child: CircularProgressIndicator());
+              }
+              else {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+
+
+            }
+            
+            
+        );
+  }
+
+  //충청 바텀슅
+  Widget CCBottomSheet(BuildContext context){
+    return
+      StreamBuilder<DocumentSnapshot>
+        (
+          stream: FirebaseFirestore.instance
+              .collection('location')
+              .doc('location')
+              .snapshots(),
+
+          builder: (context, snapshot){
+            List<dynamic> datas = snapshot.data?.get('충청도');
+
+            if(snapshot.data != null){
+              return Container(
+                child:
+                ListView.builder(
+                    itemCount: datas.length,
+                    itemBuilder: (BuildContext context, int index){
+                      String data = datas[index];
+                      return ListTile(
+                        leading: Icon(Icons.church, color: Colors.purple.shade100),
+                        title: Text('${data}'),
+                      );
+                    }
+                ),
+
+              );
+            }
+            else if (snapshot.hasError){
+              return const Center(child: CircularProgressIndicator());
+            }
+            else {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+
+
+          }
+
+
+      );
+  }
+
+  //강원 바텀슅
+  Widget GWBottomSheet(BuildContext context){
+    return
+      StreamBuilder<DocumentSnapshot>
+        (
+          stream: FirebaseFirestore.instance
+              .collection('location')
+              .doc('location')
+              .snapshots(),
+
+          builder: (context, snapshot){
+            List<dynamic> datas = snapshot.data?.get('강원도');
+
+            if(snapshot.data != null){
+              return Container(
+                child:
+                ListView.builder(
+                    itemCount: datas.length,
+                    itemBuilder: (BuildContext context, int index){
+                      String data = datas[index];
+                      return ListTile(
+                        leading: Icon(Icons.church, color: Colors.purple.shade100),
+                        title: Text('${data}'),
+                      );
+                    }
+                ),
+
+              );
+            }
+            else if (snapshot.hasError){
+              return const Center(child: CircularProgressIndicator());
+            }
+            else {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+
+
+          }
+
+
+      );
+  }
+
+  //전라 바텀슅
+  Widget JRBottomSheet(BuildContext context){
+    return
+      StreamBuilder<DocumentSnapshot>
+        (
+          stream: FirebaseFirestore.instance
+              .collection('location')
+              .doc('location')
+              .snapshots(),
+
+          builder: (context, snapshot){
+            List<dynamic> datas = snapshot.data?.get('전라도');
+
+            if(snapshot.data != null){
+              return Container(
+                child:
+                ListView.builder(
+                    itemCount: datas.length,
+                    itemBuilder: (BuildContext context, int index){
+                      String data = datas[index];
+                      return ListTile(
+                        leading: Icon(Icons.church, color: Colors.purple.shade100),
+                        title: Text('${data}'),
+                      );
+                    }
+                ),
+
+              );
+            }
+            else if (snapshot.hasError){
+              return const Center(child: CircularProgressIndicator());
+            }
+            else {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+
+
+          }
+
+
+      );
+  }
+
+  //제주 바텀슅
+  Widget JJBottomSheet(BuildContext context){
+    return
+      StreamBuilder<DocumentSnapshot>
+        (
+          stream: FirebaseFirestore.instance
+              .collection('location')
+              .doc('location')
+              .snapshots(),
+
+          builder: (context, snapshot){
+            List<dynamic> datas = snapshot.data?.get('제주도');
+
+            if(snapshot.data != null){
+              return Container(
+                child:
+                ListView.builder(
+                    itemCount: datas.length,
+                    itemBuilder: (BuildContext context, int index){
+                      String data = datas[index];
+                      return ListTile(
+                        leading: Icon(Icons.church, color: Colors.purple.shade100),
+                        title: Text('${data}'),
+                      );
+                    }
+                ),
+
+              );
+            }
+            else if (snapshot.hasError){
+              return const Center(child: CircularProgressIndicator());
+            }
+            else {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+
+
+          }
+
+
+      );
+  }
+
+  //경상 바텀슅
+  Widget GSBottomSheet(BuildContext context){
+    return
+      StreamBuilder<DocumentSnapshot>
+        (
+          stream: FirebaseFirestore.instance
+              .collection('location')
+              .doc('location')
+              .snapshots(),
+
+          builder: (context, snapshot){
+            List<dynamic> datas = snapshot.data?.get('경상도');
+
+            if(snapshot.data != null){
+              return Container(
+                child:
+                ListView.builder(
+                    itemCount: datas.length,
+                    itemBuilder: (BuildContext context, int index){
+                      String data = datas[index];
+                      return ListTile(
+                        leading: Icon(Icons.church, color: Colors.purple.shade100),
+                        title: Text('${data}'),
+                      );
+                    }
+                ),
+
+              );
+            }
+            else if (snapshot.hasError){
+              return const Center(child: CircularProgressIndicator());
+            }
+            else {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+
+
+          }
+
+
+      );
+  }
+
+
+
+
 
 
   @override
@@ -82,7 +353,14 @@ class _MapPageState extends State<MapPage> {
       Marker(
           markerId: MarkerId("1"),
           draggable: true,
-          onTap: () => print("Marker!"),
+          onTap: (){
+            showModalBottomSheet(
+              context: context,
+              builder: (context) =>
+                  SeoulBottomSheet(context)
+              // isScrollControlled: true
+            );
+          },
           position: LatLng(37.5481 , 126.9785)
       ),
     );
@@ -92,7 +370,14 @@ class _MapPageState extends State<MapPage> {
       Marker(
           markerId: MarkerId("2"),
           draggable: true,
-          onTap: () => print("Marker!"),
+          onTap: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (context) =>
+                  CCBottomSheet(context)
+              // isScrollControlled: true
+            );
+          },
           position: LatLng(36.5571, 126.9605)
       ),
     );
@@ -102,7 +387,14 @@ class _MapPageState extends State<MapPage> {
       Marker(
           markerId: MarkerId("3"),
           draggable: true,
-          onTap: () => print("Marker!"),
+          onTap: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (context) =>
+                  GWBottomSheet(context)
+              // isScrollControlled: true
+            );
+          },
           position: LatLng(37.818 , 128.1614)
       ),
     );
@@ -112,7 +404,14 @@ class _MapPageState extends State<MapPage> {
       Marker(
           markerId: MarkerId("4"),
           draggable: true,
-          onTap: () => print("Marker!"),
+          onTap: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (context) =>
+                  JJBottomSheet(context)
+              // isScrollControlled: true
+            );
+          },
           position: LatLng(33.3778 , 126.568)
       ),
     );
@@ -122,7 +421,14 @@ class _MapPageState extends State<MapPage> {
       Marker(
           markerId: MarkerId("5"),
           draggable: true,
-          onTap: () => print("Marker!"),
+          onTap: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (context) =>
+                  JRBottomSheet(context)
+              // isScrollControlled: true
+            );
+          },
           position: LatLng(35.5279 , 127.0496)
       ),
     );
@@ -132,7 +438,14 @@ class _MapPageState extends State<MapPage> {
       Marker(
           markerId: MarkerId("6"),
           draggable: true,
-          onTap: () => print("Marker!"),
+          onTap: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (context) =>
+                  GSBottomSheet(context)
+              // isScrollControlled: true
+            );
+          },
           position: LatLng(35.8142 , 128.9886)
       ),
     );
