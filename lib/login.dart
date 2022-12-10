@@ -29,7 +29,6 @@ class LoginPage extends StatelessWidget {
       'prayTitle':[],
       'praynumber': 0,
       'total_time' : 0,
-      'date' : [],
     }, SetOptions(merge : true));
     return data.user;
   }
@@ -37,16 +36,24 @@ class LoginPage extends StatelessWidget {
   Future<User?> signInWithAnonymously() async {
     final data = await FirebaseAuth.instance.signInAnonymously();
 
-    await FirebaseFirestore.instance.collection('users').doc(data.user!.uid).set({
+    await FirebaseFirestore.instance.collection('test').doc(data.user!.uid).collection('test2').doc(data.user!.uid).set({
       'email': 'Anonymous',
       'uid': data.user!.uid,
       'image': 'https://img.freepik.com/premium-vector/cute-jesus-with-finger-heart-shape_123847-889.jpg',
-      'praynumber':"0",
       'liked' : [],
       'prayTitle':[],
       'praynumber': 0,
       'total_time' : 0,
-      'date' : [],
+    }, SetOptions(merge : true));
+
+    await FirebaseFirestore.instance.collection('users').doc(data.user!.uid).set({
+      'email': 'Anonymous',
+      'uid': data.user!.uid,
+      'image': 'https://img.freepik.com/premium-vector/cute-jesus-with-finger-heart-shape_123847-889.jpg',
+      'liked' : [],
+      'prayTitle':[],
+      'praynumber': 0,
+      'total_time' : 0,
     }, SetOptions(merge : true));
     return data.user;
   }
@@ -108,16 +115,8 @@ class LoginPage extends StatelessWidget {
                   onPressed: () {
                     signInWithAnonymously().then((value) =>
                         Navigator.pushNamed(context,'/home')
+
                     );
-
-                    FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .update(
-                        {
-                          'date': FieldValue.arrayUnion([DateTime.now()])
-                        });
-
                   },
                   child: const Text('Anonymous',
                       style: TextStyle(
@@ -134,21 +133,12 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                TextButton(
-                  onPressed: (){
-                    Navigator.pushNamed(context, '/home');
-
-
-                    FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .update(
-                        {
-                          'date': FieldValue.arrayUnion([DateTime.now()])
-                        });
-                  },
-                  child: Text('home'),
-                )
+                // TextButton(
+                //   onPressed: (){
+                //     Navigator.pushNamed(context, '/home');
+                //   },
+                //   child: Text('home'),
+                // )
               ],
             ),
           ),

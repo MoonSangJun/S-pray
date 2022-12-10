@@ -11,10 +11,12 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:spray/model/group.dart';
 import 'package:spray/timer.dart';
 
 import 'calendar.dart';
 import 'firebase_options.dart';
+import 'groupview.dart';
 import 'home.dart';
 import 'login.dart';
 import 'map.dart';
@@ -22,7 +24,9 @@ import 'src/widgets.dart';
 
 
 class BoardPage extends StatefulWidget {
-  const BoardPage({super.key});
+  const BoardPage({super.key, required this.prods});
+  final prods;
+
 
   @override
   State<BoardPage> createState() => _BoardPageState();
@@ -33,7 +37,7 @@ class _BoardPageState extends State<BoardPage> {
 
   final _children = [
     TimerPage(),
-    BoardPage(),
+    GroupPage(),
     HomePage(),
     CalendarPage(), // Calender Page
     MapPage(),
@@ -48,67 +52,9 @@ class _BoardPageState extends State<BoardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Colors.purple,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.all(13.0),
-                    child: Text(
-                      'Spray',
-                      style: TextStyle(color: Colors.white, fontSize: 30),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
-              leading:  Icon(Icons.church, color: Colors.purple.shade100),
-              title: const Text('Home'),
-              onTap: () {
-                Navigator.pushNamed(context, '/');
-              },
-            ),
-            ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
-              leading:  Icon(Icons.group_add, color: Colors.purple.shade100),
-              title: const Text('Group'),
-              onTap: () {
-                Navigator.pushNamed(context, '/group');
-              },
-            ),
-            ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
-              leading:  Icon(Icons.person, color: Colors.purple.shade100),
-              title: const Text('My Profile'),
-              onTap: () {
-                Navigator.pushNamed(context, '/profile');
-              },
-            ),
-            ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
-              leading:  Icon(Icons.logout, color: Colors.purple.shade100),
-              title: const Text('Log Out'),
-              onTap: () async {
-                Navigator.pushNamed(context, '/login');
-                await FirebaseAuth.instance.signOut();
-              },
-            ),
-          ],
-        ),
-      ),
       appBar: AppBar(
         backgroundColor: Colors.purple,
-        title: const Text("Home"), centerTitle: true,
+        title: Text(widget.prods.name!), centerTitle: true,
 
 
       ),
@@ -118,23 +64,17 @@ class _BoardPageState extends State<BoardPage> {
         children: [
           ListView(
             children: <Widget>[
-              const SizedBox(height: 50),
-              Container(
-                height: 100,
-                color: Colors.purple.shade100,
-                child: Text("모앱개 팀플",),
-              ),
               const SizedBox(height: 100),
               Consumer<ApplicationState>(
                 builder: (context, appState, _) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                      const Header('기도제목'),
-                      GuestBook(
-                        addMessage: (message) =>
-                            appState.addMessageToGuestBook(message),
-                        messages: appState.guestBookMessages,
-                      ),
+                    const Header('기도제목'),
+                    GuestBook(
+                      addMessage: (message) =>
+                          appState.addMessageToGuestBook(message),
+                      messages: appState.guestBookMessages,
+                    ),
                   ],
                 ),
               ),
@@ -345,17 +285,11 @@ class ApplicationState extends ChangeNotifier {
   }
 
   Future<DocumentReference> addMessageToGuestBook(String message) {
-    if (!_loggedIn) {
-      throw Exception('Must be logged in');
-    }
 
     return FirebaseFirestore.instance
-        .collection('guestbook')
+        .collection('group')
         .add(<String, dynamic>{
       'text': message,
-      'timestamp': DateTime.now(),
-      'name': FirebaseAuth.instance.currentUser!.displayName,
-      'userId': FirebaseAuth.instance.currentUser!.uid,
     });
   }
 

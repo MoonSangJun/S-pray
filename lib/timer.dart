@@ -208,74 +208,107 @@ class _State extends State<TimerPage> {
                           return
                             StreamBuilder(
 
-                              stream: FirebaseFirestore
-                                  .instance
-                                  .collection('users')
-                                  .doc(FirebaseAuth.instance.currentUser!.uid)
-                                  .snapshots(),
+                                stream: FirebaseFirestore
+                                    .instance
+                                    .collection('users')
+                                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                                    .snapshots(),
 
-                              builder:(context1 , snapshot1){
-                                var data = snapshot1.data?.get('total_time');
-                                if(snapshot1.data != null) {
-                                  return Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                                      child: RoundedButton(
-                                        color: Colors.purple.shade100,
-                                        onTap: _stopWatchTimer.onStartTimer,
-                                        child: const Text(
-                                          'Start',
-                                          style: TextStyle(color: Colors.white),
+                                builder:(context1 , snapshot1){
+                                  var data = snapshot1.data?.get('total_time');
+                                  var cnt = snapshot1.data?.get('praynumber');
+                                  if(snapshot1.data != null) {
+                                    return Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                                          child: RoundedButton(
+                                            color: Colors.purple.shade100,
+                                            onTap: _stopWatchTimer.onStartTimer,
+                                            child: const Text(
+                                              'Start',
+                                              style: TextStyle(color: Colors.white),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                                      child: RoundedButton(
-                                        color: Colors.green,
-                                        onTap: _stopWatchTimer.onStopTimer,
-                                        child: const Text(
-                                          'Stop',
-                                          style: TextStyle(color: Colors.white),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                                          child: RoundedButton(
+                                            color: Colors.green,
+                                            onTap: _stopWatchTimer.onStopTimer,
+                                            child: const Text(
+                                              'Stop',
+                                              style: TextStyle(color: Colors.white),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                                      child: RoundedButton(
-                                        color: Colors.red,
-                                        onTap: _stopWatchTimer.onResetTimer,
-                                        child: const Text(
-                                          'Reset',
-                                          style: TextStyle(color: Colors.white),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                                          child: RoundedButton(
+                                            color: Colors.red,
+                                            onTap: _stopWatchTimer.onResetTimer,
+                                            child: const Text(
+                                              'Reset',
+                                              style: TextStyle(color: Colors.white),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                    ElevatedButton(
-                                        onPressed:(){
-                                          FirebaseFirestore.instance
-                                              .collection('users')
-                                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                                              .update({
-                                            'praynumber' : 5,
-                                            'total_time': data+value});
-                                          _stopWatchTimer.onResetTimer();
-                                        },
+                                        ElevatedButton(
+                                            onPressed:(){
+                                              FirebaseFirestore.instance
+                                                  .collection('users')
+                                                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                                                  .update({
+                                                'praynumber' : cnt+1,
+                                                'total_time': data+value});
 
-                                        child: Text("SAVE"))
-                                  ],
-                                );
-                                } else if (snapshot1.hasError){
-                                  return const Center(child: CircularProgressIndicator());
+                                              FirebaseFirestore.instance
+                                                  .collection('group')
+                                                  .doc('Handong Global University')
+                                                  .collection('user')
+                                                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                                                  .update({
+                                                'praynumber' : cnt+1,
+                                                'total_time': data+value});
+                                              //
+                                              // StreamBuilder(
+                                              //   stream: FirebaseFirestore.instance
+                                              //     .collection('users')
+                                              //     .doc(FirebaseAuth.instance.currentUser!.uid)
+                                              //     .snapshots(),
+                                              //   builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
+                                              //     List<dynamic> likedArray = snapshot.data!.get('liked');
+                                              //     if (snapshot.data != null){
+                                              //
+                                              //       FirebaseFirestore.instance
+                                              //           .collection('group')
+                                              //           .doc('Handong Global University')
+                                              //           .collection('user')
+                                              //           .doc(FirebaseAuth.instance.currentUser!.uid)
+                                              //           .update({
+                                              //         'praynumber' : cnt+1,
+                                              //         'total_time': data+value});
+                                              //     }
+                                              //   },
+                                              // );
+                                              _stopWatchTimer.onResetTimer();
+                                            },
+
+
+
+                                            child: Text("SAVE"))
+                                      ],
+                                    );
+                                  } else if (snapshot1.hasError){
+                                    return const Center(child: CircularProgressIndicator());
+                                  }
+                                  else {
+                                    return const Center(child: CircularProgressIndicator());
+                                  }
+
                                 }
-                                else {
-                                  return const Center(child: CircularProgressIndicator());
-                                }
-
-                              }
-                          );
+                            );
 
                         }
                     ),

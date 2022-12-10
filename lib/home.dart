@@ -208,7 +208,21 @@ class _HomePageState extends State<HomePage> {
                           child: Column(
                             children: [
                               SizedBox(height: 80,),
-                              Text("함께 기도해요!"),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("함께 기도해요!   ",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  Icon(
+                                    Icons.handshake,
+                                    color: Colors.purple,
+                                  )
+                                ],
+                              ),
+
                               SizedBox(height: 8,),
                               Container(
                                 padding: EdgeInsets.fromLTRB(10, 20, 0, 0),
@@ -218,10 +232,29 @@ class _HomePageState extends State<HomePage> {
                                   borderRadius: BorderRadius.circular(10.0),
                                   color: Colors.purple.shade100,
                                 ),
-                                child: Text("${prays[Random().nextInt(prays.length)]}"),
+                                child: Text("${prays[Random().nextInt(prays.length)]}",
+                                textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                  fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                )),
                               ),
                               SizedBox(height: 80,),
-                              Text("내 그룹"),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("내 그룹   ",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  Icon(
+                                    Icons.groups_rounded,
+                                    color: Colors.purple,
+                                  )
+                                ],
+                              ),
+
                               SizedBox(height: 8,),
                               Container(
                                 alignment: Alignment.center,
@@ -240,7 +273,11 @@ class _HomePageState extends State<HomePage> {
                                       return Text("그룹에 가입하세요!");
                                     }
                                     else
-                                      return Text('- ${data}');
+                                      return Text('- ${data}',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ));
                                   },
                                 ),
                               ),

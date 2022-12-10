@@ -99,6 +99,22 @@ class _AddPageState extends State<AddPage> {
         }
     );
 
+    FirebaseFirestore.instance
+        .collection('location')
+        .doc("location")
+        .update(
+        {
+          '${_location}': FieldValue.arrayUnion([_name.text])
+        });
+
+    FirebaseFirestore.instance
+        .collection('group_image')
+        .doc("group_image")
+        .update(
+        {
+          '${_name.text}': FieldValue.arrayUnion([imageUrl])
+        });
+
 
     await docRef.set(group.toJson()).then(
             (value) => log("group uploaded successfully!"),
